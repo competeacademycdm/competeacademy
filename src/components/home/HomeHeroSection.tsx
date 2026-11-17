@@ -3,8 +3,11 @@
 import React from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
+import { useLanguage } from '@/i18n';
 
 export function HomeHeroSection() {
+  const { tr } = useLanguage();
+
   return (
     <section
       aria-label="Compete Academy — Excellence Through Understanding"
@@ -31,26 +34,26 @@ export function HomeHeroSection() {
 
       {/* Hero Foreground Content — Left-Aligned Editorial Composition Directly Over Sharp Photograph */}
       <div className="relative z-10 w-full max-w-[1440px] mx-auto px-4 sm:px-8 lg:px-12 xl:px-16 pt-6 pb-4 sm:pt-8 sm:pb-5 lg:pt-10 lg:pb-6 xl:pt-12 xl:pb-7 flex-1 flex flex-col justify-between">
-        <div className="my-auto w-full max-w-2xl lg:max-w-3xl flex flex-col items-start text-left gap-3.5 sm:gap-4 lg:gap-5 py-2 sm:py-4">
+        <div className="my-auto w-full max-w-2xl lg:max-w-4xl flex flex-col items-start text-left gap-3.5 sm:gap-4 lg:gap-5 py-2 sm:py-4">
           {/* Eyebrow */}
           <div className="hero-stagger-1 inline-flex items-center gap-2.5 sm:gap-3">
             <span className="w-6 sm:w-9 h-[2px] bg-[#D4A33F] shrink-0 shadow-[0_1px_4px_rgba(0,0,0,0.6)]" />
             <span className="font-headline font-bold text-[0.65rem] xs:text-[0.6875rem] sm:text-xs text-[#F5CD6B] tracking-[0.14em] sm:tracking-[0.2em] uppercase [text-shadow:0_2px_8px_rgba(7,13,30,0.95)]">
-              COMPETE ACADEMY &nbsp;|&nbsp; EXCELLENCE THROUGH UNDERSTANDING
+              {tr.homepage.hero.eyebrow}
             </span>
           </div>
 
           {/* Main Headline */}
           <div className="hero-stagger-2 flex flex-col gap-3 sm:gap-4">
             <h1 className="font-display text-[1.75rem] xs:text-[2.2rem] sm:text-[2.85rem] lg:text-[3.25rem] xl:text-[3.65rem] font-bold tracking-[-0.02em] uppercase leading-[1.06] [text-shadow:0_3px_14px_rgba(7,13,30,0.9),0_1px_3px_rgba(0,0,0,0.95)]">
-              <span className="block text-[#FFFFFF]">DREAM BIG.</span>
-              <span className="block text-[#FFFFFF]">PREPARE SMART.</span>
-              <span className="block text-[#F2C357]">BECOME EXTRAORDINARY.</span>
+              <span className="block text-[#FFFFFF]">{tr.homepage.hero.headlineLine1}</span>
+              <span className="block text-[#FFFFFF]">{tr.homepage.hero.headlineLine2}</span>
+              <span className="block text-[#F2C357]">{tr.homepage.hero.headlineLine3}</span>
             </h1>
 
             {/* Supporting Text */}
             <p className="font-sans text-[0.875rem] sm:text-[0.975rem] lg:text-[1.0625rem] text-white/95 font-medium leading-[1.65] max-w-[52ch] [text-shadow:0_2px_10px_rgba(7,13,30,0.95),0_1px_3px_rgba(0,0,0,0.9)]">
-              A seat is just the beginning. We build the knowledge, discipline and confidence that shape tomorrow&apos;s doctors, engineers and leaders.
+              {tr.homepage.hero.description}
             </p>
           </div>
 
@@ -60,7 +63,7 @@ export function HomeHeroSection() {
               href="/neet"
               className="group inline-flex items-center justify-center gap-2.5 h-11 sm:h-12 px-6 sm:px-7 rounded-full bg-[#C69A48] hover:bg-[#d6aa56] text-[#070D1E] font-headline text-xs sm:text-sm font-extrabold tracking-wide shadow-[0_6px_22px_rgba(7,13,30,0.45)] hover:shadow-[0_8px_26px_rgba(198,154,72,0.5)] hover:-translate-y-0.5 transition-all duration-200 active:translate-y-0"
             >
-              <span>Explore Our Programmes</span>
+              <span>{tr.homepage.hero.exploreBtn}</span>
               <span className="material-symbols-outlined text-base transition-transform duration-200 group-hover:translate-x-0.5">
                 arrow_forward
               </span>
@@ -73,7 +76,7 @@ export function HomeHeroSection() {
               <span className="material-symbols-outlined text-base text-[#F2C357] transition-transform duration-200 group-hover:scale-105">
                 account_balance
               </span>
-              <span>Discover Our Academy</span>
+              <span>{tr.homepage.hero.aboutBtn}</span>
             </Link>
           </div>
         </div>
@@ -86,7 +89,7 @@ export function HomeHeroSection() {
                 workspace_premium
               </span>
               <span className="text-[#FCF9F1] tracking-wide">
-                15 YEARS OF PROFESSIONAL EXPERIENCE
+                {tr.homepage.hero.trust1}
               </span>
             </div>
 
@@ -97,7 +100,7 @@ export function HomeHeroSection() {
                 location_on
               </span>
               <span className="text-[#FCF9F1] tracking-wide">
-                CHIDAMBARAM&apos;S EDUCATIONAL HOTSPOT
+                {tr.homepage.hero.trust2}
               </span>
             </div>
 
@@ -108,7 +111,7 @@ export function HomeHeroSection() {
                 school
               </span>
               <span className="text-[#FCF9F1] tracking-wide">
-                REAL-TIME, HANDS-ON EXPERIENCE
+                {tr.homepage.hero.trust3}
               </span>
             </div>
           </div>

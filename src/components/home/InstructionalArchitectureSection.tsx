@@ -2,54 +2,9 @@
 
 import React from 'react';
 import Image from 'next/image';
+import { useLanguage } from '@/i18n';
 
-interface ArchitectureTier {
-  number: string;
-  title: string;
-  badge: string;
-  icon: string;
-  description: string;
-  coreMessage: string;
-}
-
-const TIERS: ArchitectureTier[] = [
-  {
-    number: '01',
-    title: 'Concept-Synchronized Timetable',
-    badge: 'SUBJECT-ALIGNED TIMETABLE',
-    icon: 'calendar_clock',
-    description:
-      'Every class timetable is planned around the subject and topic being taught. For example, if students learn Kinetics in Physics during the first period, the next period connects the same Kinetics topic with Chemistry, helping students understand concepts across subjects.',
-    coreMessage: 'One concept. Multiple subject perspectives.',
-  },
-  {
-    number: '02',
-    title: 'Transparent Academic Roadmap',
-    badge: 'TRANSPARENT EXAM SYLLABUS',
-    icon: 'map',
-    description:
-      'Students clearly understand what they are learning today and what they will study in the coming academic years. Every standard follows a structured lesson plan with progressively advanced features, and faculty explain the learning objectives at every stage.',
-    coreMessage: 'Know what you learn today. Know what comes next.',
-  },
-  {
-    number: '03',
-    title: 'Hybrid Learning Ecosystem',
-    badge: 'ONLINE & OFFLINE MODES',
-    icon: 'devices',
-    description:
-      'Students can learn through both online and offline modes. Access recorded video lessons and online textbooks, attend classroom sessions, and participate in live mock tests through the Compete Academy mobile application available on the Google Play Store.',
-    coreMessage: 'Learn anywhere. Practise anytime.',
-  },
-  {
-    number: '04',
-    title: 'Gamified & Personalized Learning',
-    badge: 'INDIVIDUAL PROGRESS PACING',
-    icon: 'military_tech',
-    description:
-      "Learning becomes engaging through a gamified system where students earn points, progress through levels and achieve learning milestones. Faculty adapt their teaching approach to each student's individual learning pace and needs.",
-    coreMessage: 'Every student progresses. Every achievement counts.',
-  },
-];
+const TIER_ICONS = ['calendar_clock', 'map', 'devices', 'military_tech'];
 
 interface InstructionalArchitectureSectionProps {
   onOpenEnquiry?: (topic?: string) => void;
@@ -58,8 +13,16 @@ interface InstructionalArchitectureSectionProps {
 export function InstructionalArchitectureSection({
   onOpenEnquiry,
 }: InstructionalArchitectureSectionProps) {
-  const leftTiers = [TIERS[0], TIERS[2]]; // Tier 01 & Tier 03
-  const rightTiers = [TIERS[1], TIERS[3]]; // Tier 02 & Tier 04
+  const { tr, language } = useLanguage();
+  const rawTiers = tr.homepage.instructionalArchitecture.tiers;
+
+  const tiers = rawTiers.map((tier, idx) => ({
+    ...tier,
+    icon: TIER_ICONS[idx] || 'school',
+  }));
+
+  const leftTiers = [tiers[0], tiers[2]]; // Tier 01 & Tier 03
+  const rightTiers = [tiers[1], tiers[3]]; // Tier 02 & Tier 04
 
   return (
     <section
@@ -177,26 +140,23 @@ export function InstructionalArchitectureSection({
         
         {/* 1. SECTION HEADER */}
         <div className="flex flex-col items-center text-center max-w-3xl gap-3">
-          {/* Badge: INSTRUCTIONAL ARCHITECTURE with gold flanking lines */}
+          {/* Badge with gold flanking lines */}
           <div className="flex items-center gap-3">
             <span className="w-8 sm:w-16 h-[1.5px] bg-gradient-to-r from-transparent to-[#C69A48]" />
             <span className="px-4 py-1.5 rounded-full bg-[#0B1735] text-[#FFE299] font-headline font-bold text-[0.6875rem] sm:text-xs uppercase tracking-[0.18em] shadow-sm border border-[#C69A48]/50">
-              INSTRUCTIONAL ARCHITECTURE
+              {tr.homepage.instructionalArchitecture.badge}
             </span>
             <span className="w-8 sm:w-16 h-[1.5px] bg-gradient-to-l from-transparent to-[#C69A48]" />
           </div>
 
-          {/* Main Heading: "Our Four-Tier Learning Architecture" (Serif with Gold Gradient) */}
+          {/* Main Heading */}
           <h2 className="font-display text-2xl sm:text-3xl md:text-4xl lg:text-[2.65rem] font-bold text-[#0B1735] tracking-tight leading-[1.18]">
-            Our Four-Tier{' '}
-            <span className="bg-gradient-to-r from-[#C69A48] via-[#E2A740] to-[#B3832B] bg-clip-text text-transparent">
-              Learning Architecture
-            </span>
+            {tr.homepage.instructionalArchitecture.title}
           </h2>
 
           {/* Description */}
           <p className="font-sans text-xs sm:text-sm md:text-base text-slate-600 max-w-[68ch] leading-relaxed">
-            Engineered to eliminate cognitive fatigue, pinpoint thematic weaknesses, and foster calm examination composure under pressure.
+            {tr.homepage.instructionalArchitecture.subtitle}
           </p>
         </div>
 
@@ -278,7 +238,7 @@ export function InstructionalArchitectureSection({
                     ACADEMY
                   </span>
                   <span className="font-sans text-[0.5625rem] sm:text-[0.625rem] text-slate-500 tracking-wider mt-0.5">
-                    Dream • Prepare • Become
+                    {tr.common.tagline}
                   </span>
                 </div>
               </div>
@@ -342,7 +302,7 @@ export function InstructionalArchitectureSection({
             onClick={() => onOpenEnquiry && onOpenEnquiry('Pedagogy & Methodology Syllabus')}
             className="group h-11 sm:h-12 px-7 sm:px-8 rounded-full bg-[#0B1735] hover:bg-[#12234f] text-[#FFE8A3] hover:text-white font-headline font-bold text-xs sm:text-sm tracking-wide transition-all duration-200 border border-[#C69A48]/70 hover:border-[#FFB91F] shadow-[0_4px_16px_rgba(11,23,53,0.35)] hover:shadow-[0_6px_22px_rgba(198,154,72,0.3)] hover:-translate-y-0.5 active:translate-y-0 flex items-center justify-center gap-2.5 cursor-pointer"
           >
-            <span>Explore Our Methodology</span>
+            <span>{language === 'TA' ? 'கற்பித்தல் முறையை விரிவாக அறிக' : 'Explore Our Methodology'}</span>
             <span className="material-symbols-outlined text-base sm:text-lg text-[#FFB91F] group-hover:translate-x-1 transition-transform">
               arrow_forward
             </span>

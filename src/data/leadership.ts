@@ -13,7 +13,7 @@ export const FOUNDER_DATA: LeaderProfile = {
   name: 'Er. K. S. Karthikeyan',
   designation: 'FOUNDER & DIRECTOR',
   qualification: 'B.E.',
-  affiliation: 'Founder, Compete NEET Academy',
+  affiliation: 'Founder, Compete Academy',
   image: '/images/leadership/founder-karthikeyan.jpg',
   initials: 'KK',
 };

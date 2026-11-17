@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useState } from 'react';
+import { useLanguage } from '@/i18n';
 
 interface CampusTourModalProps {
   isOpen: boolean;
@@ -8,6 +9,7 @@ interface CampusTourModalProps {
 }
 
 export function CampusTourModal({ isOpen, onClose }: CampusTourModalProps) {
+  const { tr, isTamil } = useLanguage();
   const [name, setName] = useState('');
   const [phone, setPhone] = useState('');
   const [stream, setStream] = useState('NEET');
@@ -41,19 +43,19 @@ export function CampusTourModal({ isOpen, onClose }: CampusTourModalProps) {
               domain_verification
             </span>
             <h3 className="font-headline-sm text-headline-sm text-primary">
-              Academic Campus Tour
+              {tr.forms.campusTour.title}
             </h3>
           </div>
           <button
             onClick={onClose}
-            className="w-9 h-9 rounded-full bg-surface-container flex items-center justify-center text-on-surface-variant hover:bg-surface-container-high transition-colors"
+            className="w-9 h-9 rounded-full bg-surface-container flex items-center justify-center text-on-surface-variant hover:bg-surface-container-high transition-colors cursor-pointer"
           >
             <span className="material-symbols-outlined text-lg">close</span>
           </button>
         </div>
 
         <p className="font-body-sm text-body-sm text-on-surface-variant">
-          Experience our lecture theatres, library, and 1-on-1 mentorship pod in person. Select your target stream:
+          {tr.forms.campusTour.desc}
         </p>
 
         {confirmed ? (
@@ -62,30 +64,30 @@ export function CampusTourModal({ isOpen, onClose }: CampusTourModalProps) {
               check_circle
             </span>
             <span className="font-label-md text-sm font-bold">
-              Appointment Received!
+              {tr.forms.campusTour.successTitle}
             </span>
             <span>
-              An academic counselor will contact you via WhatsApp with gate pass and parking details.
+              {tr.forms.campusTour.successDesc}
             </span>
           </div>
         ) : (
           <form onSubmit={handleSubmit} className="flex flex-col gap-3">
             <div>
               <label className="font-label-caps text-label-caps text-on-surface-variant block mb-1">
-                Full Student Name
+                {tr.forms.campusTour.fullNameLabel}
               </label>
               <input
                 type="text"
                 required
                 value={name}
                 onChange={(e) => setName(e.target.value)}
-                placeholder="e.g. S. Ananya"
+                placeholder={isTamil ? 'எ.கா. சு. அனன்யா' : 'e.g. S. Ananya'}
                 className="w-full px-3 py-2.5 bg-surface-container-lowest text-on-surface font-body-sm text-body-sm rounded-lg shadow-sm focus:outline-none focus:bg-surface-container-low border border-surface-container"
               />
             </div>
             <div>
               <label className="font-label-caps text-label-caps text-on-surface-variant block mb-1">
-                Contact Phone
+                {tr.forms.campusTour.phoneLabel}
               </label>
               <input
                 type="tel"
@@ -98,26 +100,26 @@ export function CampusTourModal({ isOpen, onClose }: CampusTourModalProps) {
             </div>
             <div>
               <label className="font-label-caps text-label-caps text-on-surface-variant block mb-1">
-                Target Examination Stream
+                {tr.forms.campusTour.streamLabel}
               </label>
               <select
                 value={stream}
                 onChange={(e) => setStream(e.target.value)}
                 className="w-full px-3 py-2.5 bg-surface-container-lowest text-on-surface font-body-sm text-body-sm rounded-lg shadow-sm focus:outline-none border border-surface-container"
               >
-                <option value="NEET">NEET (UG Medical)</option>
-                <option value="JEE">JEE (Main & Advanced)</option>
-                <option value="UPSC">UPSC Civil Services</option>
-                <option value="TNPSC">TN Government Exams (TNPSC)</option>
-                <option value="FOUNDATION">Secondary School Foundation (Class 8-10)</option>
+                <option value="NEET">{tr.forms.enquiryModal.streamOptions.neet}</option>
+                <option value="JEE">{tr.forms.enquiryModal.streamOptions.jee}</option>
+                <option value="UPSC">{tr.forms.enquiryModal.streamOptions.upsc}</option>
+                <option value="TNPSC">{tr.forms.enquiryModal.streamOptions.tnpsc}</option>
+                <option value="FOUNDATION">{tr.forms.enquiryModal.streamOptions.foundation}</option>
               </select>
             </div>
             <button
               type="submit"
-              className="w-full py-3 mt-2 bg-secondary hover:bg-secondary-fixed-dim text-on-secondary font-label-lg text-label-lg font-semibold rounded-lg shadow-md flex items-center justify-center gap-1.5 active:scale-95 transition-all"
+              className="w-full py-3 mt-2 bg-secondary hover:bg-secondary-fixed-dim text-on-secondary font-label-lg text-label-lg font-semibold rounded-lg shadow-md flex items-center justify-center gap-1.5 active:scale-95 transition-all cursor-pointer"
             >
               <span className="material-symbols-outlined text-lg">check_circle</span>
-              <span>Confirm Academic Tour</span>
+              <span>{tr.forms.campusTour.confirmBtn}</span>
             </button>
           </form>
         )}

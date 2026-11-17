@@ -3,9 +3,11 @@
 import React from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
+import { useLanguage } from '@/i18n';
 
 export function MobileBottomNav() {
   const pathname = usePathname();
+  const { tr } = useLanguage();
 
   const isCourseActive =
     pathname.startsWith('/neet') ||
@@ -14,11 +16,13 @@ export function MobileBottomNav() {
     pathname.startsWith('/foundation') ||
     pathname.startsWith('/tnpsc');
 
+  const currentCourseHref = isCourseActive ? pathname : '/neet';
+
   const tabs = [
-    { label: 'Home', href: '/', icon: 'home', activeMatch: pathname === '/' },
-    { label: 'Courses', href: '/neet', icon: 'school', activeMatch: isCourseActive },
-    { label: 'Resources', href: '/resources', icon: 'folder_open', activeMatch: pathname.startsWith('/resources') },
-    { label: 'About Us', href: '/about', icon: 'account_balance', activeMatch: pathname.startsWith('/about') },
+    { label: tr.navigation.mobileBottomNav.home, href: '/', icon: 'home', activeMatch: pathname === '/' },
+    { label: tr.navigation.mobileBottomNav.courses, href: currentCourseHref, icon: 'school', activeMatch: isCourseActive },
+    { label: tr.navigation.mobileBottomNav.resources, href: '/resources', icon: 'folder_open', activeMatch: pathname.startsWith('/resources') },
+    { label: tr.navigation.mobileBottomNav.about, href: '/about', icon: 'account_balance', activeMatch: pathname.startsWith('/about') },
   ];
 
   return (

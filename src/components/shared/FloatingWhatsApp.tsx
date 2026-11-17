@@ -1,12 +1,14 @@
 'use client';
 
 import React, { useState } from 'react';
+import { useLanguage } from '@/i18n';
 
 export function FloatingWhatsApp() {
+  const { tr } = useLanguage();
   const [showTooltip, setShowTooltip] = useState(false);
   const phoneNumber = '919476543210';
   const defaultMessage = encodeURIComponent(
-    'Hello Compete Academy! I would like to enquire about course admissions, fee structure, and batch timings.'
+    tr.forms.whatsappHelpDesk.defaultMessage
   );
   const whatsappUrl = `https://wa.me/${phoneNumber}?text=${defaultMessage}`;
 
@@ -19,7 +21,7 @@ export function FloatingWhatsApp() {
         }`}
       >
         <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
-        <span>Admissions Help Desk</span>
+        <span>{tr.forms.whatsappHelpDesk.tooltip}</span>
       </div>
 
       {/* Floating Circular Action Button */}

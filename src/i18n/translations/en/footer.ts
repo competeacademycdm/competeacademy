@@ -1,0 +1,17 @@
+export const footerEn = {
+  brandDesc: 'Empowering aspiring doctors, engineers, civil servants, and young scholars across Tamil Nadu with scholastic distinction, disciplined pedagogy, and empathetic mentorship in Chennai.',
+  academicProgramsTitle: 'Academic Programs',
+  institutionalTitle: 'Institutional',
+  aboutUs: 'About Us',
+  ourResources: 'Our Resources',
+  admissionEnquiry: 'Admission Enquiry',
+  campusTour: 'Schedule Campus Tour',
+  accreditationTitle: 'Accreditation & Compliance',
+  statutoryNotice: 'Operating in strict alignment with National Testing Agency (NTA), UPSC, TNPSC, and Tamil Nadu State Education Council frameworks. Classroom center accredited for high-stakes entrance preparation.',
+  campusContactTitle: 'Campus & Contact',
+  address: '482 Anna Salai, Guindy, Chennai – 600032',
+  helpline: 'Helpline: +91 94765 43210',
+  email: 'Email: info@competeacademy.in',
+  hours: 'Admissions Desk: Mon – Sat (8:00 AM – 7:30 PM)',
+  copyright: 'Compete Academy. All rights reserved. Excellence in Education. Confidence in Competition.',
+};

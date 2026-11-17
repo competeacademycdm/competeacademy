@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
+import { revalidatePath } from 'next/cache';
 import { db } from '@/lib/db';
 import { getAdminSessionFromRequest } from '@/lib/auth';
 
@@ -221,6 +222,14 @@ export async function POST(request: NextRequest) {
     );
 
     const created = db.prepare('SELECT * FROM learning_materials WHERE id = ?').get(id);
+
+    // Invalidate public and resource feeds so changes reflect immediately
+    try {
+      revalidatePath('/resources');
+      revalidatePath('/api/resources/materials');
+      revalidatePath('/api/admin/materials');
+    } catch {}
+
     return NextResponse.json({ success: true, material: created }, { status: 201 });
   } catch (err: unknown) {
     console.error('Error creating material:', err);

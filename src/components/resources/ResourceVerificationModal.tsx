@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useState, useEffect, useRef } from 'react';
+import { useLanguage } from '@/i18n';
 
 export interface ResourceVerificationModalProps {
   isOpen: boolean;
@@ -28,6 +29,7 @@ export function ResourceVerificationModal({
   resource,
   onVerifiedAccess,
 }: ResourceVerificationModalProps) {
+  const { tr, isTamil } = useLanguage();
   // Step 1: 'details' (Name & Mobile), Step 2: 'otp' (6-digit code), Step 3: 'success'
   const [step, setStep] = useState<'details' | 'otp' | 'success'>('details');
 
@@ -83,18 +85,30 @@ export function ResourceVerificationModal({
 
     const cleanName = name.trim();
     if (cleanName.length < 2) {
-      setErrorMessage('Please enter your full name (at least 2 letters).');
+      setErrorMessage(
+        isTamil
+          ? 'உங்கள் முழுப் பெயரை உள்ளிடவும் (குறைந்தது 2 எழுத்துகள்).'
+          : 'Please enter your full name (at least 2 letters).'
+      );
       return;
     }
 
     const cleanMobile = mobile.replace(/\D/g, '');
     if (cleanMobile.length !== 10 || !/^[6-9]/.test(cleanMobile)) {
-      setErrorMessage('Please enter a valid 10-digit Indian mobile number starting with 6, 7, 8, or 9.');
+      setErrorMessage(
+        isTamil
+          ? '6, 7, 8 அல்லது 9-இல் தொடங்கும் சரியான 10-இலக்க இந்திய மொபைல் எண்ணை உள்ளிடவும்.'
+          : 'Please enter a valid 10-digit Indian mobile number starting with 6, 7, 8, or 9.'
+      );
       return;
     }
 
     if (!consent) {
-      setErrorMessage('Please agree to verification and download record terms.');
+      setErrorMessage(
+        isTamil
+          ? 'சரிபார்ப்பு மற்றும் பதிவிறக்க விதிமுறைகளை ஏற்கவும்.'
+          : 'Please agree to verification and download record terms.'
+      );
       return;
     }
 
@@ -113,7 +127,9 @@ export function ResourceVerificationModal({
 
       const data = await res.json();
       if (!res.ok) {
-        throw new Error(data.error || 'Failed to send verification SMS.');
+        throw new Error(
+          data.error || (isTamil ? 'சரிபார்ப்பு எஸ்.எம்.எஸ் அனுப்புவதில் தோல்வி.' : 'Failed to send verification SMS.')
+        );
       }
 
       setMaskedMobile(data.maskedMobile || `+91 ${cleanMobile}`);
@@ -123,7 +139,12 @@ export function ResourceVerificationModal({
         inputRefs.current[0]?.focus();
       }, 100);
     } catch (err: unknown) {
-      const msg = err instanceof Error ? err.message : 'Error sending OTP';
+      const msg =
+        err instanceof Error
+          ? err.message
+          : isTamil
+          ? 'குறியீடு அனுப்புவதில் பிழை'
+          : 'Error sending OTP';
       setErrorMessage(msg);
     } finally {
       setLoading(false);
@@ -170,7 +191,11 @@ export function ResourceVerificationModal({
 
     const fullOtp = otpDigits.join('');
     if (fullOtp.length !== 6) {
-      setErrorMessage('Please enter all 6 digits of your verification code.');
+      setErrorMessage(
+        isTamil
+          ? 'உங்கள் 6-இலக்க சரிபார்ப்புக் குறியீட்டின் அனைத்து இலக்கங்களையும் உள்ளிடவும்.'
+          : 'Please enter all 6 digits of your verification code.'
+      );
       return;
     }
 
@@ -193,7 +218,9 @@ export function ResourceVerificationModal({
 
       const data = await res.json();
       if (!res.ok) {
-        throw new Error(data.error || 'Verification failed.');
+        throw new Error(
+          data.error || (isTamil ? 'சரிபார்ப்பு தோல்வியடைந்தது.' : 'Verification failed.')
+        );
       }
 
       setStep('success');
@@ -213,7 +240,12 @@ export function ResourceVerificationModal({
         onVerifiedAccess(accessResult);
       }, 700);
     } catch (err: unknown) {
-      const msg = err instanceof Error ? err.message : 'Error verifying code';
+      const msg =
+        err instanceof Error
+          ? err.message
+          : isTamil
+          ? 'குறியீட்டைச் சரிபார்ப்பதில் பிழை'
+          : 'Error verifying code';
       setErrorMessage(msg);
     } finally {
       setLoading(false);
@@ -276,7 +308,9 @@ export function ResourceVerificationModal({
           <div className="flex flex-col min-w-0">
             <div className="flex items-center gap-1.5">
               <span className="text-[0.6875rem] font-headline font-bold uppercase tracking-wider text-[#C69A48]">
-                {isExternal ? 'Official Government Portal' : 'Academy Learning Resource'}
+                {isExternal
+                  ? isTamil ? 'அதிகாரப்பூர்வ அரசு இணையதளம்' : 'Official Government Portal'
+                  : isTamil ? 'அகாடமி கற்றல் ஆவணம்' : 'Academy Learning Resource'}
               </span>
               {resource.authority && (
                 <span className="text-[0.6875rem] font-headline text-surface-variant font-semibold">
@@ -288,7 +322,9 @@ export function ResourceVerificationModal({
               {resource.title}
             </h4>
             <span className="text-xs text-surface-variant mt-0.5">
-              {isExternal ? 'Verified Official Source' : resource.format || 'PDF Document'}
+              {isExternal
+                ? isTamil ? 'சரிபார்க்கப்பட்ட அதிகாரப்பூர்வ மூலம்' : 'Verified Official Source'
+                : resource.format || 'PDF Document'}
             </span>
           </div>
         </div>
@@ -300,16 +336,14 @@ export function ResourceVerificationModal({
               <div className="flex items-center gap-2 text-[#C69A48] mb-1">
                 <span className="material-symbols-outlined text-base">verified_user</span>
                 <span className="font-headline font-bold text-xs uppercase tracking-wider">
-                  Student Verification Required
+                  {tr.resources.modal.step1Title}
                 </span>
               </div>
               <h3 className="font-headline text-2xl font-bold text-surface">
-                Verify to Access Resource
+                {tr.resources.modal.title}
               </h3>
               <p className="font-sans text-xs sm:text-sm text-surface-variant mt-1 leading-relaxed">
-                {isExternal
-                  ? 'Enter your name and mobile number to receive a secure SMS OTP. Once verified, you will be directed straight to the official government document.'
-                  : 'Enter your details to receive an instant verification code and unlock your authorized academic download.'}
+                {tr.resources.modal.step1Subtitle}
               </p>
             </div>
 
@@ -324,7 +358,7 @@ export function ResourceVerificationModal({
               {/* Full Name */}
               <div className="flex flex-col gap-1.5">
                 <label className="font-headline text-xs font-semibold text-surface-variant uppercase tracking-wider">
-                  Full Name <span className="text-[#C69A48]">*</span>
+                  {tr.resources.modal.nameLabel} <span className="text-[#C69A48]">*</span>
                 </label>
                 <div className="relative">
                   <span className="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-surface-variant/70 text-lg">
@@ -335,7 +369,7 @@ export function ResourceVerificationModal({
                     required
                     value={name}
                     onChange={(e) => setName(e.target.value)}
-                    placeholder="e.g. S. Karthikeyan"
+                    placeholder={tr.resources.modal.namePlaceholder}
                     maxLength={70}
                     className="w-full pl-10 pr-4 py-2.5 rounded-lg bg-surface/10 text-surface placeholder:text-surface-variant/50 border border-surface/15 focus:border-[#C69A48] focus:outline-none font-sans text-sm transition-colors"
                   />
@@ -345,7 +379,7 @@ export function ResourceVerificationModal({
               {/* Mobile Number */}
               <div className="flex flex-col gap-1.5">
                 <label className="font-headline text-xs font-semibold text-surface-variant uppercase tracking-wider">
-                  Indian Mobile Number <span className="text-[#C69A48]">*</span>
+                  {tr.resources.modal.mobileLabel} <span className="text-[#C69A48]">*</span>
                 </label>
                 <div className="flex items-center gap-2">
                   <div className="px-3 py-2.5 rounded-lg bg-surface/10 border border-surface/15 text-surface font-headline text-sm font-bold shrink-0">
@@ -360,7 +394,7 @@ export function ResourceVerificationModal({
                       required
                       value={mobile}
                       onChange={(e) => setMobile(e.target.value.replace(/\D/g, '').slice(0, 10))}
-                      placeholder="10-digit mobile number"
+                      placeholder={tr.resources.modal.mobilePlaceholder}
                       maxLength={10}
                       className="w-full pl-10 pr-4 py-2.5 rounded-lg bg-surface/10 text-surface placeholder:text-surface-variant/50 border border-surface/15 focus:border-[#C69A48] focus:outline-none font-sans text-sm tracking-wider transition-colors"
                     />
@@ -377,7 +411,7 @@ export function ResourceVerificationModal({
                   className="mt-0.5 rounded border-surface/20 text-[#C69A48] focus:ring-0"
                 />
                 <span className="leading-relaxed">
-                  I consent to verify my identity via SMS OTP and register my session for Compete Academy competitive examination resources.
+                  {tr.resources.modal.consentText}
                 </span>
               </label>
             </div>
@@ -385,17 +419,17 @@ export function ResourceVerificationModal({
             <button
               type="submit"
               disabled={loading}
-              className="mt-2 w-full py-3 rounded-lg bg-[#C69A48] hover:bg-[#B69A62] text-[#0A1226] font-headline text-sm font-bold flex items-center justify-center gap-2 shadow-sm transition-all active:scale-95 disabled:opacity-50"
+              className="mt-2 w-full py-3 rounded-lg bg-[#C69A48] hover:bg-[#B69A62] text-[#0A1226] font-headline text-sm font-bold flex items-center justify-center gap-2 shadow-sm transition-all active:scale-95 disabled:opacity-50 cursor-pointer"
             >
               {loading ? (
                 <>
                   <div className="w-4 h-4 border-2 border-[#0A1226] border-t-transparent rounded-full animate-spin" />
-                  <span>Sending Verification Code...</span>
+                  <span>{tr.resources.modal.sendingOtp}</span>
                 </>
               ) : (
                 <>
                   <span className="material-symbols-outlined text-base">send_to_mobile</span>
-                  <span>Send OTP via SMS</span>
+                  <span>{tr.resources.modal.sendOtp}</span>
                 </>
               )}
             </button>
@@ -409,15 +443,15 @@ export function ResourceVerificationModal({
               <div className="flex items-center gap-2 text-[#C69A48] mb-1">
                 <span className="material-symbols-outlined text-base">sms</span>
                 <span className="font-headline font-bold text-xs uppercase tracking-wider">
-                  SMS Code Sent
+                  {tr.resources.modal.step2Title}
                 </span>
               </div>
               <h3 className="font-headline text-2xl font-bold text-surface">
-                Enter 6-Digit OTP
+                {tr.resources.modal.step2Title}
               </h3>
               <p className="font-sans text-xs sm:text-sm text-surface-variant mt-1 leading-relaxed">
-                We sent a 6-digit verification code to{' '}
-                <strong className="text-surface font-semibold">{maskedMobile}</strong>. Valid for 5 minutes.
+                {tr.resources.modal.step2Subtitle}{' '}
+                <strong className="text-surface font-semibold">{maskedMobile}</strong>.
               </p>
             </div>
 
@@ -452,21 +486,23 @@ export function ResourceVerificationModal({
               <button
                 type="button"
                 onClick={() => setStep('details')}
-                className="text-surface-variant hover:text-surface flex items-center gap-1 font-semibold"
+                className="text-surface-variant hover:text-surface flex items-center gap-1 font-semibold cursor-pointer"
               >
                 <span className="material-symbols-outlined text-sm">edit</span>
-                <span>Change Mobile</span>
+                <span>{isTamil ? 'எண்ணை மாற்றுக' : 'Change Mobile'}</span>
               </button>
 
               <button
                 type="button"
                 disabled={cooldown > 0 || loading}
                 onClick={handleResend}
-                className="text-[#C69A48] hover:text-[#FFB91F] font-bold flex items-center gap-1 disabled:opacity-40"
+                className="text-[#C69A48] hover:text-[#FFB91F] font-bold flex items-center gap-1 disabled:opacity-40 cursor-pointer"
               >
                 <span className="material-symbols-outlined text-sm">replay</span>
                 <span>
-                  {cooldown > 0 ? `Resend code in ${cooldown}s` : 'Resend OTP'}
+                  {cooldown > 0
+                    ? `${tr.resources.modal.resendIn} ${cooldown}${tr.resources.modal.seconds}`
+                    : tr.resources.modal.resend}
                 </span>
               </button>
             </div>
@@ -474,17 +510,17 @@ export function ResourceVerificationModal({
             <button
               type="submit"
               disabled={loading || otpDigits.join('').length !== 6}
-              className="mt-2 w-full py-3 rounded-lg bg-[#C69A48] hover:bg-[#B69A62] text-[#0A1226] font-headline text-sm font-bold flex items-center justify-center gap-2 shadow-sm transition-all active:scale-95 disabled:opacity-50"
+              className="mt-2 w-full py-3 rounded-lg bg-[#C69A48] hover:bg-[#B69A62] text-[#0A1226] font-headline text-sm font-bold flex items-center justify-center gap-2 shadow-sm transition-all active:scale-95 disabled:opacity-50 cursor-pointer"
             >
               {loading ? (
                 <>
                   <div className="w-4 h-4 border-2 border-[#0A1226] border-t-transparent rounded-full animate-spin" />
-                  <span>Verifying Code on Server...</span>
+                  <span>{tr.resources.modal.verifying}</span>
                 </>
               ) : (
                 <>
                   <span className="material-symbols-outlined text-base">check_circle</span>
-                  <span>{isExternal ? 'Verify & Open Official Document' : 'Verify & Unlock Download'}</span>
+                  <span>{tr.resources.modal.verifyBtn}</span>
                 </>
               )}
             </button>
@@ -500,12 +536,10 @@ export function ResourceVerificationModal({
               </span>
             </div>
             <h3 className="font-headline text-xl font-bold text-surface">
-              Verification Successful!
+              {tr.resources.modal.step3Title}
             </h3>
             <p className="font-sans text-xs sm:text-sm text-surface-variant max-w-sm">
-              {isExternal
-                ? `Your identity has been verified. Redirecting you to the official ${resource.authority || 'Government'} destination...`
-                : 'Your identity has been verified. Your requested resource download is starting immediately...'}
+              {tr.resources.modal.step3Subtitle}
             </p>
 
             {/* Popup blocker fallback */}
@@ -519,7 +553,7 @@ export function ResourceVerificationModal({
                   className="px-4 py-2 rounded-lg bg-[#C69A48] hover:bg-[#B69A62] text-[#0A1226] font-headline text-xs font-bold flex items-center gap-1.5 shadow-sm"
                 >
                   <span>
-                    {isExternal ? 'Click Here If Tab Did Not Open' : 'Click Here To Download Again'}
+                    {tr.resources.modal.downloadNow}
                   </span>
                   <span className="material-symbols-outlined text-sm">
                     {isExternal ? 'arrow_forward' : 'download'}

@@ -39,7 +39,7 @@ export interface EligibilityCategory {
 export interface CurriculumChapter {
   title: string;
   subtopics: string[];
-  weightageLevel: 'High Yield' | 'Core Standard' | 'Foundational';
+  weightageLevel: 'High Yield' | 'Core Standard' | 'Foundational' | string;
   estimatedHours: number;
 }
 

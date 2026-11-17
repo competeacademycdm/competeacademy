@@ -5,6 +5,7 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import dynamic from 'next/dynamic';
 import { BrandLogo } from '@/components/layout/BrandLogo';
+import { useLanguage } from '@/i18n';
 
 const StudentPortalModal = dynamic(
   () => import('@/components/shared/StudentPortalModal').then((mod) => mod.StudentPortalModal),
@@ -88,23 +89,16 @@ export const PROGRAMME_DESTINATIONS: ProgrammeDestination[] = [
 
 export function Navbar() {
   const pathname = usePathname();
+  const { language, setLanguage } = useLanguage();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [portalOpen, setPortalOpen] = useState(false);
   const [enquiryOpen, setEnquiryOpen] = useState(false);
-  const [language, setLanguage] = useState<'EN' | 'TA'>('EN');
   const [langToast, setLangToast] = useState(false);
   const [programmesOpen, setProgrammesOpen] = useState(false);
   const [mobileProgrammesExpanded, setMobileProgrammesExpanded] = useState(true);
 
   const dropdownRef = useRef<HTMLDivElement>(null);
   const dropdownTimerRef = useRef<NodeJS.Timeout | null>(null);
-
-  const toggleLanguage = () => {
-    const nextLang = language === 'EN' ? 'TA' : 'EN';
-    setLanguage(nextLang);
-    setLangToast(true);
-    setTimeout(() => setLangToast(false), 2500);
-  };
 
   const isProgrammesActive = PROGRAMME_DESTINATIONS.some((p) =>
     pathname.startsWith(p.href)
@@ -188,17 +182,17 @@ export function Navbar() {
               <div className="flex items-center gap-1.5 text-slate-300">
                 <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
                 <span className="font-semibold text-slate-200">
-                  {language === 'TA' ? 'சேர்க்கை நடைபெறுகிறது' : 'Academic Admissions Open'}
+                  {language === 'TA' ? 'புதிய சேர்க்கை நடைபெறுகிறது' : 'Academic Admissions Open'}
                 </span>
                 <span className="hidden md:inline text-slate-400">
-                  • Anna Salai, Guindy, Chennai
+                  {language === 'TA' ? '• அண்ணா சாலை, கிண்டி, சென்னை' : '• Anna Salai, Guindy, Chennai'}
                 </span>
               </div>
 
               <span className="hidden lg:inline text-slate-700">|</span>
 
               <span className="hidden lg:inline text-slate-400 font-medium">
-                Mon – Sat: 8:00 AM – 7:30 PM
+                {language === 'TA' ? 'திங்கள் – சனி: காலை 8:00 – மாலை 7:30' : 'Mon – Sat: 8:00 AM – 7:30 PM'}
               </span>
             </div>
           </div>
@@ -206,7 +200,7 @@ export function Navbar() {
 
         {/* 2. MAIN NAVIGATION */}
         <div className="w-full bg-[#101B35]/95 backdrop-blur-md border-b border-[#D6A23A]/25 shadow-[0_1px_8px_rgba(16,27,61,0.15)]">
-          <div className="w-full max-w-[1440px] mx-auto px-3 sm:px-6 lg:px-10 xl:px-14 h-14 sm:h-16 flex items-center justify-between gap-2 md:gap-6">
+          <div className="w-full max-w-[1440px] mx-auto px-3 sm:px-5 lg:px-6 xl:px-10 h-14 sm:h-16 flex items-center justify-between gap-2 md:gap-4">
 
             {/* Brand Logo */}
             <Link
@@ -217,12 +211,12 @@ export function Navbar() {
             </Link>
 
             {/* DESKTOP NAVIGATION */}
-            <nav className="hidden lg:flex items-center gap-1 xl:gap-2">
+            <nav className="hidden lg:flex items-center gap-0.5 xl:gap-2">
 
               {/* HOME */}
               <Link
                 href="/"
-                className={`relative px-3 py-1.5 font-headline text-xs xl:text-[0.8125rem] transition-all duration-200 tracking-wide flex items-center gap-1.5 rounded-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#D6A23A] group ${
+                className={`relative px-2.5 xl:px-3 py-1.5 font-headline text-xs xl:text-[0.8125rem] transition-all duration-200 tracking-wide flex items-center gap-1.5 rounded-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#D6A23A] group ${
                   pathname === '/'
                     ? 'text-[#101B35] font-bold bg-[#D6A23A]'
                     : 'text-[#D6A23A] hover:text-[#F2C66D] font-semibold hover:bg-white/10'
@@ -434,24 +428,51 @@ export function Navbar() {
             {/* RIGHT SIDE ACTIONS */}
             <div className="flex items-center gap-2 sm:gap-2.5 shrink-0">
 
-              {/* LANGUAGE SWITCHER */}
-              <button
-                type="button"
-                onClick={toggleLanguage}
-                aria-label="Switch Language"
-                className="h-8 sm:h-9 px-2 sm:px-3 flex items-center justify-center rounded-md bg-slate-100/90 hover:bg-slate-200/80 text-[#101B3D] text-[0.625rem] sm:text-xs font-headline font-bold tracking-wide transition-colors border border-slate-200/90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#D6A23A] cursor-pointer"
-                title="Toggle English and Tamil"
+              {/* UPGRADED BILINGUAL LANGUAGE SWITCHER */}
+              <div
+                className="flex items-center rounded-md bg-[#0a1026] border border-[#D6A23A]/50 p-0.5 shadow-sm"
+                role="group"
+                aria-label="Language selection"
               >
-                {language === 'EN' ? (
-                  <span className="whitespace-nowrap">
-                    EN | <span className="font-tamil">தமிழ்</span>
-                  </span>
-                ) : (
-                  <span className="whitespace-nowrap">
-                    <span className="font-tamil">தமிழ்</span> | EN
-                  </span>
-                )}
-              </button>
+                <button
+                  type="button"
+                  onClick={() => {
+                    if (language !== 'EN') {
+                      setLanguage('EN');
+                      setLangToast(true);
+                      setTimeout(() => setLangToast(false), 2000);
+                    }
+                  }}
+                  aria-pressed={language === 'EN'}
+                  className={`h-7 sm:h-8 px-2 sm:px-2.5 flex items-center justify-center rounded text-[0.6875rem] sm:text-xs font-headline font-bold tracking-wide transition-all cursor-pointer ${
+                    language === 'EN'
+                      ? 'bg-[#D6A23A] text-[#101B35] shadow-xs'
+                      : 'text-slate-300 hover:text-[#F2C66D] hover:bg-white/10'
+                  }`}
+                  title="English interface"
+                >
+                  EN
+                </button>
+                <button
+                  type="button"
+                  onClick={() => {
+                    if (language !== 'TA') {
+                      setLanguage('TA');
+                      setLangToast(true);
+                      setTimeout(() => setLangToast(false), 2000);
+                    }
+                  }}
+                  aria-pressed={language === 'TA'}
+                  className={`h-7 sm:h-8 px-2 sm:px-2.5 flex items-center justify-center rounded text-[0.6875rem] sm:text-xs font-tamil font-bold tracking-wide transition-all cursor-pointer ${
+                    language === 'TA'
+                      ? 'bg-[#D6A23A] text-[#101B35] shadow-xs'
+                      : 'text-slate-300 hover:text-[#F2C66D] hover:bg-white/10'
+                  }`}
+                  title="தமிழ் இடைமுகம் (Tamil interface)"
+                >
+                  தமிழ்
+                </button>
+              </div>
 
               {/* ADMIN BUTTON */}
               <Link
@@ -495,7 +516,9 @@ export function Navbar() {
               </span>
 
               <span className="hidden md:inline-block text-[#C69A48] font-semibold">
-                • Anna Salai, Guindy &amp; Chidambaram Campuses
+                {language === 'TA'
+                  ? '• அண்ணா சாலை, கிண்டி & சிதம்பரம் வளாகங்கள்'
+                  : '• Anna Salai, Guindy & Chidambaram Campuses'}
               </span>
             </div>
 
@@ -686,12 +709,8 @@ export function Navbar() {
             {/* DRAWER BOTTOM ACTIONS */}
             <div className="flex flex-col gap-3 bg-white/5 p-4 rounded-xl border border-white/10 mt-6">
 
-              {/* MOBILE LANGUAGE TOGGLE */}
-              <button
-                type="button"
-                onClick={toggleLanguage}
-                className="flex items-center justify-between w-full py-2 px-3 rounded-lg bg-white/10 text-white font-headline text-xs font-semibold hover:bg-white/15 transition-colors cursor-pointer"
-              >
+              {/* MOBILE BILINGUAL LANGUAGE SWITCHER */}
+              <div className="flex items-center justify-between w-full py-2 px-3 rounded-lg bg-white/10 text-white font-headline text-xs font-semibold">
                 <div className="flex items-center gap-2">
                   <span className="material-symbols-outlined text-[#D6A23A] text-base">
                     translate
@@ -699,10 +718,43 @@ export function Navbar() {
                   <span>{language === 'TA' ? 'மொழி / Language' : 'Language / மொழி'}</span>
                 </div>
 
-                <span className="px-2 py-0.5 rounded bg-[#D6A23A] text-[#0B142B] font-bold text-[0.6875rem]">
-                  {language === 'EN' ? 'தமிழ்' : 'English'}
-                </span>
-              </button>
+                <div className="flex items-center rounded bg-[#0B142B] border border-[#D6A23A]/40 p-0.5">
+                  <button
+                    type="button"
+                    onClick={() => {
+                      if (language !== 'EN') {
+                        setLanguage('EN');
+                        setLangToast(true);
+                        setTimeout(() => setLangToast(false), 2000);
+                      }
+                    }}
+                    className={`px-2.5 py-1 rounded text-xs font-bold transition-all cursor-pointer ${
+                      language === 'EN'
+                        ? 'bg-[#D6A23A] text-[#0B142B]'
+                        : 'text-slate-300 hover:text-white'
+                    }`}
+                  >
+                    EN
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      if (language !== 'TA') {
+                        setLanguage('TA');
+                        setLangToast(true);
+                        setTimeout(() => setLangToast(false), 2000);
+                      }
+                    }}
+                    className={`px-2.5 py-1 rounded text-xs font-tamil font-bold transition-all cursor-pointer ${
+                      language === 'TA'
+                        ? 'bg-[#D6A23A] text-[#0B142B]'
+                        : 'text-slate-300 hover:text-white'
+                    }`}
+                  >
+                    தமிழ்
+                  </button>
+                </div>
+              </div>
 
               <a
                 className="flex items-center gap-2.5 text-white font-sans text-xs hover:text-[#D6A23A] transition-colors px-1"

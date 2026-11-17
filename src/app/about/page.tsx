@@ -3,6 +3,7 @@
 import React, { useState } from 'react';
 import Image from 'next/image';
 import dynamic from 'next/dynamic';
+import { useLanguage } from '@/i18n';
 
 const CampusTourModal = dynamic(
   () => import('@/components/shared/CampusTourModal').then((mod) => mod.CampusTourModal),
@@ -10,6 +11,7 @@ const CampusTourModal = dynamic(
 );
 
 export default function AboutPage() {
+  const { tr, isTamil } = useLanguage();
   const [campusModalOpen, setCampusModalOpen] = useState(false);
 
   return (
@@ -20,17 +22,17 @@ export default function AboutPage() {
           <div className="flex items-center gap-2">
             <span className="w-8 h-0.5 bg-secondary" />
             <span className="font-headline text-xs font-bold uppercase tracking-wider text-secondary">
-              Compete Academy Heritage
+              {tr.about.heritageBadge}
             </span>
           </div>
 
           <div className="flex flex-col gap-3 max-w-4xl">
             <h1 className="font-headline text-3xl sm:text-4xl md:text-5xl text-primary font-bold tracking-tight uppercase leading-[1.15]">
-              MORE THAN COACHING.<br />
-              <span className="text-secondary">A COMMITMENT TO YOUR FUTURE.</span>
+              {tr.about.heroTitleLine1}<br />
+              <span className="text-secondary">{tr.about.heroTitleLine2}</span>
             </h1>
             <p className="font-sans text-sm md:text-base lg:text-lg text-on-surface-variant leading-relaxed max-w-3xl">
-              Founded to empower aspiring doctors, engineers, civil servants, and scholars across Tamil Nadu and India with unwavering scholastic distinction.
+              {tr.about.heroSubtitle}
             </p>
           </div>
 
@@ -39,7 +41,7 @@ export default function AboutPage() {
             <div className="relative w-full h-72 sm:h-96 lg:h-[460px]">
               <Image
                 className="w-full h-full object-cover"
-                alt="Compete NEET Academy Chidambaram Campus Signboard and Entrance"
+                alt="Compete Academy Chidambaram Campus Signboard and Entrance"
                 src="/compete-academy-signboard.webp"
                 fill
                 priority
@@ -49,11 +51,11 @@ export default function AboutPage() {
                 <div className="flex items-center gap-2 text-secondary-fixed mb-1">
                   <span className="material-symbols-outlined text-base">verified</span>
                   <span className="font-headline text-xs font-bold uppercase tracking-wider text-secondary-fixed">
-                    Accredited Pedagogy Center • Compete NEET Academy
+                    {tr.about.signboardBadge}
                   </span>
                 </div>
                 <p className="font-display text-xl sm:text-2xl lg:text-3xl text-surface font-bold tracking-tight">
-                  Academic Campus & Learning Center
+                  {tr.about.signboardTitle}
                 </p>
               </div>
             </div>
@@ -63,26 +65,26 @@ export default function AboutPage() {
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 pt-2">
             <div className="bg-surface-container-lowest p-6 rounded-xl flex flex-col items-center text-center shadow-sm border border-surface-container">
               <span className="font-display text-3xl sm:text-4xl text-primary font-bold">
-                14+
+                {tr.about.factlets.stat1Number}
               </span>
               <span className="font-sans text-xs sm:text-sm text-on-surface-variant uppercase tracking-wider font-semibold mt-1">
-                Years of Rigour
+                {tr.about.factlets.stat1Label}
               </span>
             </div>
             <div className="bg-surface-container-lowest p-6 rounded-xl flex flex-col items-center text-center shadow-sm border border-surface-container">
               <span className="font-display text-3xl sm:text-4xl text-secondary font-bold">
-                18,500+
+                {tr.about.factlets.stat2Number}
               </span>
               <span className="font-sans text-xs sm:text-sm text-on-surface-variant uppercase tracking-wider font-semibold mt-1">
-                Selections Across India
+                {tr.about.factlets.stat2Label}
               </span>
             </div>
             <div className="bg-surface-container-lowest p-6 rounded-xl flex flex-col items-center text-center shadow-sm border border-surface-container">
               <span className="font-display text-3xl sm:text-4xl text-primary font-bold">
-                98.4%
+                {tr.about.factlets.stat3Number}
               </span>
               <span className="font-sans text-xs sm:text-sm text-on-surface-variant uppercase tracking-wider font-semibold mt-1">
-                Exam Readiness Quotient
+                {tr.about.factlets.stat3Label}
               </span>
             </div>
           </div>
@@ -96,28 +98,30 @@ export default function AboutPage() {
             <div className="flex items-center gap-2">
               <span className="material-symbols-outlined text-secondary text-sm">history_edu</span>
               <span className="font-headline text-xs font-bold uppercase tracking-wider text-secondary">
-                Genesis & Purpose
+                {isTamil ? 'தோற்றமும் நோக்கமும்' : 'Genesis & Purpose'}
               </span>
             </div>
             <h2 className="font-headline text-2xl sm:text-3xl lg:text-4xl text-primary font-bold tracking-tight">
-              Bridging Pure Theory and High-Stakes Mastery
+              {isTamil
+                ? 'கோட்பாட்டு அறிவையும் நடைமுறைத் தேர்ச்சியையும் இணைக்கும் பாலம்'
+                : 'Bridging Pure Theory and High-Stakes Mastery'}
             </h2>
           </div>
 
           {/* Narrative block */}
           <div className="bg-surface-container-lowest p-6 sm:p-8 lg:p-10 rounded-2xl shadow-sm flex flex-col gap-4 border border-surface-container">
             <p className="font-sans text-sm sm:text-base md:text-[1.0625rem] text-on-surface leading-relaxed">
-              In 2011, a council of veteran medical educators and civil service scholars recognized an acute educational divide: traditional curricula encouraged rote reproduction, while competitive national exams demanded nuanced synthesis, spatial problem-solving, and deep cognitive stamina.
+              {tr.about.manifesto.desc1}
             </p>
             <p className="font-sans text-xs sm:text-sm md:text-base text-on-surface-variant leading-relaxed">
-              Compete Academy was constituted in Chennai as an intellectual sanctuary. We re-engineered test preparation from high-stress cramming into an organized science of foundational clarity, empathetic mentorship, and unwavering academic integrity.
+              {tr.about.manifesto.desc2}
             </p>
           </div>
 
           {/* Three Foundational Pillars */}
           <div className="flex flex-col gap-4">
             <span className="font-headline text-xs font-bold uppercase tracking-wider text-on-surface-variant">
-              The Three Foundational Pillars
+              {isTamil ? 'மூன்று அடிப்படைக் கற்றல் தூண்கள்' : 'The Three Foundational Pillars'}
             </span>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
               {/* Pillar 1 */}
@@ -127,10 +131,12 @@ export default function AboutPage() {
                 </div>
                 <div className="flex flex-col min-w-0">
                   <h3 className="font-headline text-base sm:text-lg text-primary font-bold">
-                    1. Academic Rigour
+                    {isTamil ? '1. கல்விப் புலமை & ஆழமான புரிதல்' : '1. Academic Rigour'}
                   </h3>
                   <p className="font-sans text-xs sm:text-sm text-on-surface-variant mt-1.5 leading-relaxed">
-                    Curated syllabus models engineered by doctors and IITians that dissect complex NEET physics and UPSC analytical frameworks without shortcuts.
+                    {isTamil
+                      ? 'குறுக்குவழிகள் இன்றி, நீட் இயற்பியல் மற்றும் யு.பி.எஸ்.சி பகுப்பாய்வுத் திறனை மருத்துவர்கள் மற்றும் ஐ.ஐ.டி பேராசிரியர்களால் வடிவமைக்கப்பட்ட பாடத்திட்டம்.'
+                      : 'Curated syllabus models engineered by doctors and IITians that dissect complex NEET physics and UPSC analytical frameworks without shortcuts.'}
                   </p>
                 </div>
               </div>
@@ -142,10 +148,12 @@ export default function AboutPage() {
                 </div>
                 <div className="flex flex-col min-w-0">
                   <h3 className="font-headline text-base sm:text-lg text-primary font-bold">
-                    2. Empathetic Mentorship
+                    {isTamil ? '2. அக்கறையுடன் கூடிய தனிநபர் வழிகாட்டல்' : '2. Empathetic Mentorship'}
                   </h3>
                   <p className="font-sans text-xs sm:text-sm text-on-surface-variant mt-1.5 leading-relaxed">
-                    Every student is assigned a dedicated scholastic mentor. Academic anxieties are systematically demystified through personalized check-ins.
+                    {isTamil
+                      ? 'ஒவ்வொரு மாணவருக்கும் பிரத்யேக கல்வி வழிகாட்டி. தேர்வு பயம் மற்றும் பதற்றத்தைத் தனிப்பட்ட ஆலோசனைகள் மூலம் திட்டமிட்டு நீக்குகிறோம்.'
+                      : 'Every student is assigned a dedicated scholastic mentor. Academic anxieties are systematically demystified through personalized check-ins.'}
                   </p>
                 </div>
               </div>
@@ -157,10 +165,12 @@ export default function AboutPage() {
                 </div>
                 <div className="flex flex-col min-w-0">
                   <h3 className="font-headline text-base sm:text-lg text-primary font-bold">
-                    3. Uncompromising Integrity
+                    {isTamil ? '3. நேர்மையும் வெளிப்படைத்தன்மையும்' : '3. Uncompromising Integrity'}
                   </h3>
                   <p className="font-sans text-xs sm:text-sm text-on-surface-variant mt-1.5 leading-relaxed">
-                    Transparent assessment logs, verifiable result registries, and ethical scholarly coaching that respects each candidate&rsquo;s cognitive journey.
+                    {isTamil
+                      ? 'வெளிப்படையான மதிப்பீட்டுப் பதிவுகள், சரிபார்க்கப்பட்ட தேர்வு முடிவுகள் மற்றும் ஒவ்வொரு மாணவரின் கற்றல் வேகத்தை மதிக்கும் நெறிமுறை சார்ந்த பயிற்சி.'
+                      : 'Transparent assessment logs, verifiable result registries, and ethical scholarly coaching that respects each candidate’s cognitive journey.'}
                   </p>
                 </div>
               </div>
@@ -177,24 +187,28 @@ export default function AboutPage() {
             <div className="flex items-center gap-2">
               <span className="w-2.5 h-2.5 rounded-full bg-secondary-fixed" />
               <span className="font-headline text-xs font-bold uppercase tracking-wider text-secondary-fixed">
-                Institutional Leadership
+                {isTamil ? 'நிறுவனத் தலைமை' : 'Institutional Leadership'}
               </span>
             </div>
             <h2 className="font-headline text-2xl sm:text-3xl lg:text-4xl text-surface font-bold tracking-tight">
-              Guided by Medical Professionals, Driven by Academic Experts
+              {isTamil
+                ? 'மருத்துவர்களால் வழிநடத்தப்பட்டு, பேராசிரியர்களால் இயக்கப்படும் அமைப்பு'
+                : 'Guided by Medical Professionals, Driven by Academic Experts'}
             </h2>
             <p className="font-sans text-xs sm:text-sm md:text-base text-surface-variant/90 max-w-2xl leading-relaxed">
-              Meet our visionary Founder and distinguished Academic Advisors dedicated to guiding aspirants toward medical and competitive examination excellence.
+              {isTamil
+                ? 'மாணவர்களை மருத்துவ மற்றும் போட்டித் தேர்வு சாதனைகளை நோக்கி வழிநடத்தும் எங்கள் நிறுவனரையும் மூத்த கல்வி ஆலோசகர்களையும் சந்தியுங்கள்.'
+                : 'Meet our visionary Founder and distinguished Academic Advisors dedicated to guiding aspirants toward medical and competitive examination excellence.'}
             </p>
           </div>
 
           {/* Founder Feature Card */}
           <div className="bg-surface-container-low/10 backdrop-blur-md rounded-2xl p-6 sm:p-8 lg:p-10 flex flex-col lg:flex-row items-center lg:items-start gap-8 lg:gap-12 border border-surface/15 shadow-xl">
-            {/* Founder Portrait Frame: Controlled 4:5 aspect ratio, 420-460px height on desktop, never stretched or horizontal banner */}
+            {/* Founder Portrait Frame */}
             <div className="relative w-64 sm:w-72 lg:w-[340px] aspect-[4/5] max-h-[460px] rounded-2xl overflow-hidden shrink-0 shadow-2xl border-2 border-secondary/50 bg-[#071126] ring-1 ring-secondary/20">
               <Image
                 src="/compete-founder-karthikeyan.webp?v=3"
-                alt="Portrait of Er. K.S. Karthikeyan, B.E., Founder of Compete NEET Academy"
+                alt="Portrait of Er. K.S. Karthikeyan, B.E., Founder of Compete Academy"
                 fill
                 priority
                 className="object-contain object-center p-1.5"
@@ -206,24 +220,26 @@ export default function AboutPage() {
               <div className="flex items-center justify-center lg:justify-start gap-2 text-secondary-fixed mb-1.5">
                 <span className="material-symbols-outlined text-base">verified</span>
                 <span className="font-headline text-xs font-bold uppercase tracking-wider">
-                  Founder & Director
+                  {isTamil ? 'நிறுவனர் & இயக்குனர்' : 'Founder & Director'}
                 </span>
               </div>
               <h3 className="font-display text-2xl sm:text-3xl lg:text-4xl text-surface font-bold tracking-tight">
-                Er. K.S. Karthikeyan, B.E.
+                {isTamil ? 'பொறியாளர் கே.எஸ். கார்த்திகேயன், B.E.' : 'Er. K.S. Karthikeyan, B.E.'}
               </h3>
               <span className="font-sans text-xs sm:text-sm text-secondary-fixed mt-1 font-semibold">
-                Founder — Compete NEET Academy
+                {isTamil ? 'நிறுவனர் — காம்பீட் அகாடமி' : 'Founder — Compete Academy'}
               </span>
               <p className="font-sans text-xs sm:text-sm md:text-base text-surface-variant/90 leading-relaxed mt-4">
-                Under the strategic stewardship of Er. K.S. Karthikeyan, Compete NEET Academy was established to deliver rigorous, student-centric competitive coaching. Emphasizing conceptual mastery from first principles and disciplined test conditioning, his vision ensures every aspirant receives dedicated academic and psychological support throughout their preparation journey.
+                {isTamil
+                  ? 'பொறியாளர் கே.எஸ். கார்த்திகேயன் அவர்களின் வழிகாட்டலில், மாணவர்களை மையமாகக் கொண்ட தரமான பயிற்சியை வழங்கும் நோக்குடன் காம்பீட் அகாடமி நிறுவப்பட்டது. அடிப்படைக் கோட்பாடுகளை ஆழமாகப் புரிந்துகொள்வதற்கும், தொடர் தேர்வுப் பயிற்சிக்கும் முக்கியத்துவம் அளிக்கும் இவரது வழிகாட்டல், ஒவ்வொரு மாணவருக்கும் முழுமையான கல்வி மற்றும் உளவியல் ஆதரவை உறுதி செய்கிறது.'
+                  : 'Under the strategic stewardship of Er. K.S. Karthikeyan, Compete Academy was established to deliver rigorous, student-centric competitive coaching. Emphasizing conceptual mastery from first principles and disciplined test conditioning, his vision ensures every aspirant receives dedicated academic and psychological support throughout their preparation journey.'}
               </p>
               <div className="flex flex-wrap items-center justify-center lg:justify-start gap-2.5 mt-6 pt-5 border-t border-surface/10">
                 <span className="px-3.5 py-1.5 rounded-full bg-surface/10 text-xs font-headline font-semibold text-surface border border-surface/10">
-                  Concept-First Pedagogy
+                  {isTamil ? 'கருத்து-முதல் கற்பித்தல் முறை' : 'Concept-First Pedagogy'}
                 </span>
                 <span className="px-3.5 py-1.5 rounded-full bg-surface/10 text-xs font-headline font-semibold text-secondary-fixed border border-secondary/30">
-                  Individual Student Mentoring
+                  {isTamil ? 'தனிநபர் மாணவர் வழிகாட்டல்' : 'Individual Student Mentoring'}
                 </span>
               </div>
             </div>
@@ -232,7 +248,7 @@ export default function AboutPage() {
           {/* Academic Advisors Grid */}
           <div className="flex flex-col gap-4">
             <span className="font-headline text-xs font-bold uppercase tracking-wider text-secondary-fixed">
-              Senior Academic Advisors
+              {isTamil ? 'மூத்த கல்வி ஆலோசகர்கள்' : 'Senior Academic Advisors'}
             </span>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6 lg:gap-8">
               {/* Dr. S. Sathya */}
@@ -249,19 +265,21 @@ export default function AboutPage() {
                 </div>
                 <div className="flex flex-col min-w-0 flex-1 text-center sm:text-left justify-center my-auto">
                   <span className="font-headline text-[0.6875rem] font-bold uppercase tracking-wider text-secondary-fixed">
-                    Academic Advisor
+                    {isTamil ? 'கல்வி ஆலோசகர்' : 'Academic Advisor'}
                   </span>
                   <h4 className="font-display text-xl sm:text-2xl text-surface font-bold mt-1">
-                    Dr. S. Sathya
+                    {isTamil ? 'டாக்டர் எஸ். சத்யா' : 'Dr. S. Sathya'}
                   </h4>
                   <span className="font-sans text-xs text-slate-300 font-medium mt-0.5">
                     M.B.B.S., M.S. (O.G.), FFM.
                   </span>
                   <span className="font-sans text-xs text-secondary-fixed/90 font-medium">
-                    A4 Group of Hospitals, Chennai
+                    {isTamil ? 'ஏ4 மருத்துவமனை குழுமம், சென்னை' : 'A4 Group of Hospitals, Chennai'}
                   </span>
                   <p className="font-sans text-xs text-surface-variant/80 leading-relaxed mt-3">
-                    Provides medical curricular guidance, high-yield NEET biology correlation, and empathetic candidate mentorship to sustain focus and composure.
+                    {isTamil
+                      ? 'மருத்துவப் பாடத்திட்ட வழிகாட்டல், நீட் உயிரியல் பாட நுணுக்கங்கள் மற்றும் மாணவர்களுக்கான உளவியல் ஆலோசனைகளை வழங்கி ஊக்கப்படுத்துகிறார்.'
+                      : 'Provides medical curricular guidance, high-yield NEET biology correlation, and empathetic candidate mentorship to sustain focus and composure.'}
                   </p>
                 </div>
               </div>
@@ -280,19 +298,21 @@ export default function AboutPage() {
                 </div>
                 <div className="flex flex-col min-w-0 flex-1 text-center sm:text-left justify-center my-auto">
                   <span className="font-headline text-[0.6875rem] font-bold uppercase tracking-wider text-secondary-fixed">
-                    Academic Advisor
+                    {isTamil ? 'கல்வி ஆலோசகர்' : 'Academic Advisor'}
                   </span>
                   <h4 className="font-display text-xl sm:text-2xl text-surface font-bold mt-1">
-                    Dr. M. Shanmugasundaram
+                    {isTamil ? 'டாக்டர் எம். சண்முகசுந்தரம்' : 'Dr. M. Shanmugasundaram'}
                   </h4>
                   <span className="font-sans text-xs text-slate-300 font-medium mt-0.5">
                     M.B.B.S., M.S. Ortho
                   </span>
                   <span className="font-sans text-xs text-secondary-fixed/90 font-medium">
-                    Senior Assistant Professor (MMC)
+                    {isTamil ? 'உதவிப் பேராசிரியர், மெட்ராஸ் மருத்துவக் கல்லூரி (MMC)' : 'Senior Assistant Professor (MMC)'}
                   </span>
                   <p className="font-sans text-xs text-surface-variant/80 leading-relaxed mt-3">
-                    Specialist academic mentor and Senior Assistant Professor at Madras Medical College, stewarding exam strategy and empirical analytical drills.
+                    {isTamil
+                      ? 'மெட்ராஸ் மருத்துவக் கல்லூரியின் மூத்த உதவிப் பேராசிரியர். தேர்வு உத்திகள் மற்றும் துல்லியமான பயிற்சி முறைகளில் மாணவர்களை வழிநடத்துகிறார்.'
+                      : 'Specialist academic mentor and Senior Assistant Professor at Madras Medical College, stewarding exam strategy and empirical analytical drills.'}
                   </p>
                 </div>
               </div>
@@ -308,14 +328,14 @@ export default function AboutPage() {
             <div className="flex items-center gap-2">
               <span className="material-symbols-outlined text-secondary text-base">apartment</span>
               <span className="font-headline text-xs font-bold uppercase tracking-wider text-secondary">
-                The Learning Atmosphere
+                {tr.about.infrastructure.badge}
               </span>
             </div>
             <h2 className="font-headline text-2xl sm:text-3xl lg:text-4xl text-primary font-bold tracking-tight">
-              Sanctuary of Scholastic Discipline
+              {tr.about.infrastructure.title}
             </h2>
             <p className="font-sans text-xs sm:text-sm md:text-base text-on-surface-variant max-w-2xl leading-relaxed">
-              Immersive infrastructure configured specifically to foster uninterrupted focus and peer collaboration.
+              {tr.about.infrastructure.subtitle}
             </p>
           </div>
 
@@ -332,15 +352,15 @@ export default function AboutPage() {
                   sizes="(max-width: 768px) 100vw, 50vw"
                 />
                 <span className="absolute top-4 left-4 bg-primary-container/90 text-surface text-xs font-semibold px-3 py-1.5 rounded-md shadow-sm font-headline">
-                  Live Academic Classroom
+                  {isTamil ? 'நேரடி வகுப்பறை' : 'Live Academic Classroom'}
                 </span>
               </div>
               <div className="p-6 flex flex-col gap-2">
                 <h3 className="font-headline text-base sm:text-lg lg:text-xl text-primary font-bold">
-                  Dedicated Interactive Classrooms
+                  {tr.about.infrastructure.facility2Title}
                 </h3>
                 <p className="font-sans text-xs sm:text-sm md:text-base text-on-surface-variant leading-relaxed">
-                  Equipped with focused classroom seating engineered for intensive NEET and competitive exam mentoring.
+                  {tr.about.infrastructure.facility2Desc}
                 </p>
               </div>
             </div>
@@ -356,15 +376,15 @@ export default function AboutPage() {
                   sizes="(max-width: 768px) 100vw, 50vw"
                 />
                 <span className="absolute top-4 left-4 bg-secondary text-on-secondary text-xs font-semibold px-3 py-1.5 rounded-md shadow-sm font-headline">
-                  Academic Reading Pods
+                  {isTamil ? 'வாசிப்பு அறைகள்' : 'Academic Reading Pods'}
                 </span>
               </div>
               <div className="p-6 flex flex-col gap-2">
                 <h3 className="font-headline text-base sm:text-lg lg:text-xl text-primary font-bold">
-                  The Dr. Sarvepalli Reference Library
+                  {tr.about.infrastructure.facility1Title}
                 </h3>
                 <p className="font-sans text-xs sm:text-sm md:text-base text-on-surface-variant leading-relaxed">
-                  Housing over 14,000 competitive exam volumes, past 30-year national solved question repositories, and silent carrels.
+                  {tr.about.infrastructure.facility1Desc}
                 </p>
               </div>
             </div>
@@ -375,25 +395,25 @@ export default function AboutPage() {
             <div className="bg-surface-container-low p-4 rounded-xl flex items-center gap-3 border border-surface-container">
               <span className="material-symbols-outlined text-secondary text-2xl">air</span>
               <span className="font-headline text-xs sm:text-sm font-semibold text-on-surface">
-                Climate-Controlled Pods
+                {isTamil ? 'குளிர்சாதன வசதியுடைய அறைகள்' : 'Climate-Controlled Pods'}
               </span>
             </div>
             <div className="bg-surface-container-low p-4 rounded-xl flex items-center gap-3 border border-surface-container">
               <span className="material-symbols-outlined text-secondary text-2xl">wifi</span>
               <span className="font-headline text-xs sm:text-sm font-semibold text-on-surface">
-                Gigabit Portal Access
+                {isTamil ? 'அதிவேக இணைய வசதி' : 'Gigabit Portal Access'}
               </span>
             </div>
             <div className="bg-surface-container-low p-4 rounded-xl flex items-center gap-3 border border-surface-container">
               <span className="material-symbols-outlined text-secondary text-2xl">coffee</span>
               <span className="font-headline text-xs sm:text-sm font-semibold text-on-surface">
-                Nutritious Lounge
+                {isTamil ? 'ஆரோக்கிய ஓய்வறை' : 'Nutritious Lounge'}
               </span>
             </div>
             <div className="bg-surface-container-low p-4 rounded-xl flex items-center gap-3 border border-surface-container">
               <span className="material-symbols-outlined text-secondary text-2xl">health_and_safety</span>
               <span className="font-headline text-xs sm:text-sm font-semibold text-on-surface">
-                On-Campus Medical Desk
+                {isTamil ? 'வளாக மருத்துவ முதலுதவி மையம்' : 'On-Campus Medical Desk'}
               </span>
             </div>
           </div>
@@ -411,13 +431,15 @@ export default function AboutPage() {
           {/* Bold Institutional Motto */}
           <div className="flex flex-col gap-2 max-w-2xl">
             <span className="font-headline text-xs text-secondary-fixed tracking-wider uppercase font-bold">
-              The Compete Academy Credo
+              {isTamil ? 'காம்பீட் அகாடமியின் தாரக மந்திரம்' : 'The Compete Academy Credo'}
             </span>
             <h2 className="font-display text-3xl sm:text-4xl lg:text-5xl text-surface font-bold tracking-tight">
-              DREAM. PREPARE. BECOME.
+              {isTamil ? 'கனவு காணுங்கள். தயாராகுங்கள். சாதியுங்கள்.' : 'DREAM. PREPARE. BECOME.'}
             </h2>
             <p className="font-sans text-sm sm:text-base md:text-lg text-surface-variant/90 leading-relaxed mt-2">
-              Your aspirations deserve the rigorous stewardship of Tamil Nadu&rsquo;s most esteemed competitive examination faculty.
+              {isTamil
+                ? 'உங்கள் கனவுகளைத் தமிழ்நாட்டின் தலைசிறந்த போட்டித் தேர்வுப் பேராசிரியர்களின் உறுதியான வழிகாட்டலில் ஒப்படையுங்கள்.'
+                : 'Your aspirations deserve the rigorous stewardship of Tamil Nadu’s most esteemed competitive examination faculty.'}
             </p>
           </div>
 
@@ -425,18 +447,18 @@ export default function AboutPage() {
           <div className="flex flex-col sm:flex-row w-full sm:w-auto gap-4 pt-2">
             <button
               onClick={() => setCampusModalOpen(true)}
-              className="py-3.5 sm:py-4 px-6 sm:px-8 bg-secondary text-on-secondary hover:bg-secondary-fixed-dim font-headline text-sm sm:text-base font-bold rounded-xl shadow-md flex items-center justify-center gap-2 active:scale-95 transition-all"
+              className="py-3.5 sm:py-4 px-6 sm:px-8 bg-secondary text-on-secondary hover:bg-secondary-fixed-dim font-headline text-sm sm:text-base font-bold rounded-xl shadow-md flex items-center justify-center gap-2 active:scale-95 transition-all cursor-pointer"
               id="btn-schedule-visit"
             >
               <span className="material-symbols-outlined text-xl">event_seat</span>
-              <span>Schedule Campus Visit</span>
+              <span>{tr.about.cta.scheduleBtn}</span>
             </button>
             <a
-              href="tel:+919476543210"
+              href={`tel:${tr.common.phone.replace(/\s+/g, '')}`}
               className="py-3.5 sm:py-4 px-6 sm:px-8 bg-surface/10 hover:bg-surface/15 text-surface font-headline text-sm sm:text-base font-bold rounded-xl flex items-center justify-center gap-2 active:scale-95 transition-colors border border-surface/20"
             >
               <span className="material-symbols-outlined text-secondary-fixed text-xl">call</span>
-              <span>Talk to Academic Dean</span>
+              <span>{tr.about.cta.callBtn}</span>
             </a>
           </div>
 
@@ -448,10 +470,10 @@ export default function AboutPage() {
               </span>
               <div className="flex flex-col">
                 <span className="font-headline text-xs sm:text-sm text-surface font-bold">
-                  Central Administrative Campus
+                  {isTamil ? 'முதன்மை நிர்வாக வளாகம்' : 'Central Administrative Campus'}
                 </span>
                 <span className="font-sans text-xs sm:text-sm text-surface-variant/80 mt-0.5">
-                  Compete Towers, 482 Anna Salai, Guindy, Chennai - 600032
+                  {tr.common.campusAddress}
                 </span>
               </div>
             </div>
@@ -460,7 +482,7 @@ export default function AboutPage() {
                 schedule
               </span>
               <span className="font-sans text-xs sm:text-sm text-surface-variant/80">
-                Admissions Desk: Mon – Sat, 8:00 AM – 7:30 PM
+                {isTamil ? 'சேர்க்கை மையம்: திங்கள் – சனி, காலை 8:00 – மாலை 7:30' : 'Admissions Desk: Mon – Sat, 8:00 AM – 7:30 PM'}
               </span>
             </div>
           </div>

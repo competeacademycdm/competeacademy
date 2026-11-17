@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
+import { revalidatePath } from 'next/cache';
 import { db } from '@/lib/db';
 import { getAdminSessionFromRequest } from '@/lib/auth';
 
@@ -112,6 +113,14 @@ export async function PUT(request: NextRequest, context: RouteContext) {
     );
 
     const updated = db.prepare('SELECT * FROM learning_materials WHERE id = ?').get(id);
+
+    // Invalidate public and resource feeds so updates reflect immediately
+    try {
+      revalidatePath('/resources');
+      revalidatePath('/api/resources/materials');
+      revalidatePath('/api/admin/materials');
+    } catch {}
+
     return NextResponse.json({ success: true, material: updated });
   } catch (err: unknown) {
     console.error('Error updating material:', err);
@@ -147,6 +156,13 @@ export async function DELETE(request: NextRequest, context: RouteContext) {
       String(existing.title),
       session.email
     );
+
+    // Invalidate public and resource feeds so deletion reflects immediately
+    try {
+      revalidatePath('/resources');
+      revalidatePath('/api/resources/materials');
+      revalidatePath('/api/admin/materials');
+    } catch {}
 
     return NextResponse.json({ success: true, message: 'Material deleted successfully' });
   } catch (err: unknown) {

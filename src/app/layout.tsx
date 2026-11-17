@@ -13,6 +13,7 @@ import { Navbar } from '@/components/layout/Navbar';
 import { Footer } from '@/components/layout/Footer';
 import { MobileBottomNav } from '@/components/layout/MobileBottomNav';
 import { GlobalClientWidgets } from '@/components/layout/GlobalClientWidgets';
+import { LanguageProvider } from '@/i18n';
 
 const inter = Inter({
   subsets: ['latin'],
@@ -102,15 +103,22 @@ export default function RootLayout({
         />
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `(function(){try{var m=document.cookie.match(/(^| )compete_lang=([^;]+)/);var l=(m&&m[2])||localStorage.getItem('compete_academy_lang')||'EN';if(l==='TA'||l==='ta'){document.documentElement.lang='ta';document.documentElement.classList.add('lang-ta');}else{document.documentElement.lang='en';document.documentElement.classList.remove('lang-ta');}}catch(e){}})();`,
+          }}
+        />
       </head>
       <body className="bg-surface font-sans text-on-surface flex flex-col min-h-screen antialiased">
-        <Navbar />
-        <main className="flex-1 w-full min-w-0 max-w-full pt-[var(--header-total-height)] bg-surface pb-20 md:pb-0 overflow-x-clip">
-          {children}
-        </main>
-        <Footer />
-        <MobileBottomNav />
-        <GlobalClientWidgets />
+        <LanguageProvider>
+          <Navbar />
+          <main className="flex-1 w-full min-w-0 max-w-full pt-[var(--header-total-height)] bg-surface pb-20 md:pb-0 overflow-x-clip">
+            {children}
+          </main>
+          <Footer />
+          <MobileBottomNav />
+          <GlobalClientWidgets />
+        </LanguageProvider>
       </body>
     </html>
   );

@@ -3,6 +3,13 @@
 import React, { useRef, useEffect } from 'react';
 import gsap from 'gsap';
 import { ExamResourceItem } from '@/data/examResources';
+import { useLanguage } from '@/i18n';
+import {
+  localizeCategory,
+  localizeSubject,
+  localizeMedium,
+  localizeClassLevel,
+} from '@/i18n/dynamicContentLocalization';
 
 export interface UnifiedResourceCardItem {
   id: string;
@@ -30,10 +37,26 @@ interface EditorialResourceCardProps {
   onSelect: (item: UnifiedResourceCardItem | ExamResourceItem) => void;
 }
 
+const localizeAuthority = (auth: string | undefined, isTa: boolean): string => {
+  if (!auth) return '';
+  if (!isTa) return auth;
+  if (auth.includes('NTA') || auth.includes('National Testing Agency')) {
+    if (auth.includes('IIT')) return 'தேசியத் தேர்வு முகமை (NTA) & ஐ.ஐ.டி (IITs)';
+    if (auth.includes('NMC') || auth.includes('Medical')) return 'தேசியத் தேர்வு முகமை (NTA) & NMC';
+    return 'தேசியத் தேர்வு முகமை (NTA)';
+  }
+  if (auth.includes('NMC') || auth.includes('Medical Commission')) return 'தேசிய மருத்துவ ஆணையம் (NMC)';
+  if (auth.includes('UPSC') || auth.includes('Union Public Service')) return 'மத்திய அரசுப் பணியாளர் தேர்வாணையம் (UPSC)';
+  if (auth.includes('TNPSC') || auth.includes('Tamil Nadu Public Service')) return 'தமிழ்நாடு அரசுப் பணியாளர் தேர்வாணையம் (TNPSC)';
+  if (auth.includes('NCERT') || auth.includes('CBSE') || auth.includes('Foundation') || auth.includes('State Board')) return 'என்.சி.இ.ஆர்.டி & மாநிலக் கல்வி வாரியம்';
+  return auth;
+};
+
 export function EditorialResourceCard({
   item,
   onSelect,
 }: EditorialResourceCardProps) {
+  const { language, isTamil } = useLanguage();
   const cardRef = useRef<HTMLElement>(null);
   const arrowIconRef = useRef<HTMLSpanElement>(null);
 
@@ -103,22 +126,24 @@ export function EditorialResourceCard({
     <article
       ref={cardRef}
       onClick={() => onSelect(item)}
-      className="group relative bg-[#FFFFFF] rounded-md border border-[#E8E2D5] p-5 sm:p-6 transition-colors duration-150 flex flex-col justify-between cursor-pointer select-none shadow-[0_1px_2px_rgba(11,20,43,0.03)]"
+      className="group relative bg-[#FFFFFF] rounded-xl border border-[#E8E2D5] p-5 sm:p-6 transition-all duration-150 flex flex-col justify-between cursor-pointer select-none shadow-[0_1px_2px_rgba(11,20,43,0.03)] hover:shadow-md hover:border-[#C69A3A] w-full min-w-0 h-full"
     >
       {/* -------------------------------------------------------------
           1. TOP METADATA BAR
           Clean editorial header without year tags
           ------------------------------------------------------------- */}
-      <div className="flex items-center justify-between gap-3 pb-3 border-b border-[#F0EBE0]">
-        <div className="flex flex-wrap items-center gap-2 text-slate-600 font-inter text-xs">
+      <div className="flex items-center justify-between gap-3 pb-3 border-b border-[#F0EBE0] w-full min-w-0">
+        <div className="flex flex-wrap items-center gap-2 text-slate-600 font-inter text-xs min-w-0">
           {/* Class Level or Exam Name Tag */}
-          <span className="font-manrope font-bold uppercase tracking-wider text-[0.6875rem] text-[#7C5806]">
-            {unifiedItem.classLevel || unifiedItem.examName || 'Compete Academy'}
+          <span className="font-manrope font-bold uppercase tracking-wider text-[0.6875rem] text-[#7C5806] shrink-0">
+            {unifiedItem.classLevel
+              ? localizeClassLevel(unifiedItem.classLevel, language)
+              : unifiedItem.examName || 'Compete Academy'}
           </span>
-          <span className="text-slate-300 font-inter">&bull;</span>
+          <span className="text-slate-300 font-inter shrink-0">&bull;</span>
           {/* Text-based document type indicator */}
           <span
-            className={`font-manrope text-[0.6875rem] font-semibold tracking-wide ${
+            className={`font-manrope text-[0.6875rem] font-semibold tracking-wide shrink-0 ${
               isKey
                 ? 'text-amber-800'
                 : isPaper
@@ -128,11 +153,11 @@ export function EditorialResourceCard({
                 : 'text-purple-900'
             }`}
           >
-            {paperType}
+            {localizeCategory(paperType, language)}
           </span>
           {unifiedItem.chapter && (
             <>
-              <span className="text-slate-300 font-inter">&bull;</span>
+              <span className="text-slate-300 font-inter shrink-0">&bull;</span>
               <span className="text-slate-500 font-inter text-[0.6875rem] truncate max-w-[140px]">
                 {unifiedItem.chapter}
               </span>
@@ -143,40 +168,51 @@ export function EditorialResourceCard({
         {/* Minimal Official Verified Marker */}
         <div className="flex items-center gap-1 font-inter text-[0.6875rem] font-medium text-emerald-800 shrink-0">
           <span className="material-symbols-outlined text-[13px] text-emerald-700">verified</span>
-          <span className="hidden sm:inline">Official Publication</span>
+          <span className="hidden sm:inline">
+            {isTamil ? 'அங்கீகரிக்கப்பட்ட ஆவணம்' : 'Official Publication'}
+          </span>
         </div>
       </div>
 
       {/* -------------------------------------------------------------
           2. MAIN CONTENT
           Authoritative document title in Playfair Display serif
+          Structured flexible area to keep footer perfectly pinned
           ------------------------------------------------------------- */}
-      <div className="pt-3.5 pb-4 flex flex-col gap-2">
-        {/* Title */}
-        <h3 className="font-serif text-lg sm:text-xl font-bold text-[#0B142B] leading-snug group-hover:text-[#7C5806] transition-colors">
-          {'title' in item && item.title ? item.title : item.subject}
-        </h3>
+      <div className="pt-3.5 pb-4 flex-1 flex flex-col justify-between gap-3 w-full min-w-0">
+        <div className="flex flex-col gap-2 min-w-0">
+          {/* Title */}
+          <h3 className="font-serif text-base sm:text-lg font-bold text-[#0B142B] leading-snug group-hover:text-[#7C5806] transition-colors break-words line-clamp-2">
+            {'title' in item && item.title ? item.title : localizeSubject(item.subject, language)}
+          </h3>
 
-        {/* Secondary Context Line: Authority, Session, Language in Inter */}
-        <div className="flex flex-wrap items-center gap-x-2 gap-y-1 text-xs text-slate-500 font-inter">
-          <span>Authority: <strong className="text-slate-800 font-medium">{item.authority}</strong></span>
-          {unifiedItem.sessionOrPhase && (
-            <>
-              <span className="text-slate-300">/</span>
-              <span className="text-slate-700 font-medium">{unifiedItem.sessionOrPhase}</span>
-            </>
-          )}
-          {(unifiedItem.language || unifiedItem.medium) && (
-            <>
-              <span className="text-slate-300">/</span>
-              <span>Medium: {unifiedItem.language || unifiedItem.medium}</span>
-            </>
-          )}
+          {/* Secondary Context Line: Authority, Session, Language in Inter */}
+          <div className="flex flex-wrap items-center gap-x-2 gap-y-1 text-xs text-slate-500 font-inter">
+            <span>
+              {isTamil ? 'ஆணையம்: ' : 'Authority: '}
+              <strong className="text-slate-800 font-medium">{localizeAuthority(item.authority, isTamil)}</strong>
+            </span>
+            {unifiedItem.sessionOrPhase && (
+              <>
+                <span className="text-slate-300">/</span>
+                <span className="text-slate-700 font-medium">{unifiedItem.sessionOrPhase}</span>
+              </>
+            )}
+            {(unifiedItem.language || unifiedItem.medium) && (
+              <>
+                <span className="text-slate-300">/</span>
+                <span>
+                  {isTamil ? 'மொழி: ' : 'Medium: '}
+                  {localizeMedium(unifiedItem.language || unifiedItem.medium, language)}
+                </span>
+              </>
+            )}
+          </div>
         </div>
 
         {/* Optional concise academic notes in DM Sans */}
         {(unifiedItem.notes || unifiedItem.description) && (
-          <p className="font-dmsans text-xs text-slate-600 line-clamp-2 leading-relaxed mt-1">
+          <p className="font-dmsans text-xs text-slate-600 line-clamp-2 leading-relaxed mt-auto pt-1">
             {unifiedItem.notes || unifiedItem.description}
           </p>
         )}
@@ -185,10 +221,12 @@ export function EditorialResourceCard({
       {/* -------------------------------------------------------------
           3. FOOTER AREA
           Structured IBM Plex Sans source info & Primary Manrope Action
+          Pinned to bottom across all sibling cards
           ------------------------------------------------------------- */}
-      <div className="pt-3.5 border-t border-[#F0EBE0] flex items-center justify-between gap-3">
-        <span className="text-[0.6875rem] font-ibm text-slate-400 truncate max-w-[190px] sm:max-w-[260px]">
-          Source: <span className="text-slate-600">{item.sourceType}</span>
+      <div className="mt-auto pt-3.5 border-t border-[#F0EBE0] flex items-center justify-between gap-3 w-full min-w-0">
+        <span className="text-[0.6875rem] font-ibm text-slate-400 truncate max-w-[180px] sm:max-w-[240px]">
+          {isTamil ? 'மூலம்: ' : 'Source: '}
+          <span className="text-slate-600">{item.sourceType}</span>
         </span>
 
         <button
@@ -197,18 +235,18 @@ export function EditorialResourceCard({
             e.stopPropagation();
             onSelect(item);
           }}
-          className="px-4 py-2 rounded-md font-manrope text-xs font-bold bg-[#0B142B] hover:bg-[#182A59] text-white flex items-center gap-1.5 transition-colors cursor-pointer shrink-0 border border-[#0B142B]"
+          className="px-4 py-2 rounded-md font-manrope text-xs font-bold bg-[#0B142B] hover:bg-[#182A59] text-white flex items-center gap-1.5 transition-colors cursor-pointer shrink-0 border border-[#0B142B] shadow-xs"
         >
           <span>
             {item.isDirectDownload
-              ? 'Download'
+              ? isTamil ? 'பதிவிறக்கு' : 'Download'
               : isPaper
-              ? 'View Paper'
+              ? isTamil ? 'வினாத்தாளைக் காண்க' : 'View Paper'
               : isKey
-              ? 'View Answer Key'
+              ? isTamil ? 'விடைக்குறிப்பைக் காண்க' : 'View Answer Key'
               : isNotes
-              ? 'View Study Notes'
-              : 'Open Document'}
+              ? isTamil ? 'பாடக் குறிப்பைக் காண்க' : 'View Study Notes'
+              : isTamil ? 'ஆவணத்தைத் திற' : 'Open Document'}
           </span>
           <span
             ref={arrowIconRef}

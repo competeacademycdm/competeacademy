@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useState } from 'react';
+import { useLanguage } from '@/i18n';
 
 interface StudentPortalModalProps {
   isOpen: boolean;
@@ -15,6 +16,7 @@ export function StudentPortalModal({
   docTitle = 'Compete Academy Student Portal',
   onSuccess,
 }: StudentPortalModalProps) {
+  const { tr, isTamil } = useLanguage();
   const [rollNo, setRollNo] = useState('');
   const [pin, setPin] = useState('');
   const [status, setStatus] = useState<'idle' | 'verifying' | 'granted'>('idle');
@@ -47,16 +49,16 @@ export function StudentPortalModal({
             </div>
             <div className="flex flex-col">
               <h4 className="font-label-md text-label-md font-semibold text-on-surface">
-                Student Portal Verification
+                {tr.forms.studentPortal.title}
               </h4>
               <span className="font-label-caps text-[0.625rem] text-secondary">
-                Academic Credentials Required
+                {tr.forms.studentPortal.badge}
               </span>
             </div>
           </div>
           <button
             onClick={onClose}
-            className="text-outline hover:text-on-surface transition-colors"
+            className="text-outline hover:text-on-surface transition-colors cursor-pointer"
           >
             <span className="material-symbols-outlined">close</span>
           </button>
@@ -65,7 +67,7 @@ export function StudentPortalModal({
         {/* Target Document Box */}
         <div className="p-space-xs bg-surface-container-low rounded-lg flex flex-col gap-0.5">
           <span className="font-label-caps text-[0.625rem] text-on-surface-variant uppercase">
-            Document / Resource Requested
+            {isTamil ? 'கோரப்பட்ட ஆவணம் / வளப்பகுதி' : 'Document / Resource Requested'}
           </span>
           <span className="font-label-md text-[0.75rem] font-semibold text-primary truncate">
             {docTitle}
@@ -78,52 +80,52 @@ export function StudentPortalModal({
               verified
             </span>
             <span className="font-label-md text-sm font-bold">
-              Access Granted!
+              {tr.forms.studentPortal.successTitle}
             </span>
             <span className="font-body-sm text-[0.75rem]">
-              Initiating secure academic document download...
+              {tr.forms.studentPortal.successDesc}
             </span>
           </div>
         ) : (
           <form onSubmit={handleSubmit} className="flex flex-col gap-space-sm">
             <div className="flex flex-col gap-1">
               <label className="font-label-md text-[0.6875rem] font-semibold text-on-surface uppercase">
-                Registration / Roll No.
+                {tr.forms.studentPortal.rollLabel}
               </label>
               <input
                 type="text"
                 required
                 value={rollNo}
                 onChange={(e) => setRollNo(e.target.value)}
-                placeholder="e.g. CA-2025-MED-1049"
+                placeholder={tr.forms.studentPortal.rollPlaceholder}
                 className="w-full px-3 py-2 rounded-lg bg-surface-container text-on-surface font-body-sm text-body-sm focus:outline-none focus:bg-surface-container-high focus:ring-1 focus:ring-secondary transition-all"
               />
             </div>
             <div className="flex flex-col gap-1">
               <label className="font-label-md text-[0.6875rem] font-semibold text-on-surface uppercase">
-                Registered Mobile OTP / PIN
+                {tr.forms.studentPortal.pinLabel}
               </label>
               <input
                 type="password"
                 required
                 value={pin}
                 onChange={(e) => setPin(e.target.value)}
-                placeholder="••••••"
+                placeholder={tr.forms.studentPortal.pinPlaceholder}
                 className="w-full px-3 py-2 rounded-lg bg-surface-container text-on-surface font-body-sm text-body-sm focus:outline-none focus:bg-surface-container-high focus:ring-1 focus:ring-secondary transition-all tracking-widest"
               />
             </div>
             <button
               type="submit"
               disabled={status === 'verifying'}
-              className="w-full py-2.5 mt-1 rounded-lg bg-primary-container hover:bg-primary text-on-primary font-label-md text-label-md font-semibold flex items-center justify-center gap-1.5 shadow-sm active:scale-95 transition-all"
+              className="w-full py-2.5 mt-1 rounded-lg bg-primary-container hover:bg-primary text-on-primary font-label-md text-label-md font-semibold flex items-center justify-center gap-1.5 shadow-sm active:scale-95 transition-all cursor-pointer"
             >
               <span className="material-symbols-outlined text-base">
                 {status === 'verifying' ? 'hourglass_top' : 'verified_user'}
               </span>
               <span>
                 {status === 'verifying'
-                  ? 'Verifying Student Record...'
-                  : 'Verify & Unlock Document'}
+                  ? tr.forms.studentPortal.verifyingBtn
+                  : tr.forms.studentPortal.verifyBtn}
               </span>
             </button>
           </form>
@@ -131,12 +133,12 @@ export function StudentPortalModal({
 
         <div className="text-center">
           <span className="font-body-sm text-[0.6875rem] text-on-surface-variant">
-            Not yet enrolled?{' '}
+            {isTamil ? 'இன்னும் பதிவு செய்யவில்லையா? ' : 'Not yet enrolled? '}
             <a
-              href="tel:+919476543210"
+              href={`tel:${tr.common.phone.replace(/\s+/g, '')}`}
               className="text-secondary font-semibold hover:underline"
             >
-              Contact Admission Cell
+              {isTamil ? 'சேர்க்கை மையத்தைத் தொடர்புகொள்ளவும்' : 'Contact Admission Cell'}
             </a>
           </span>
         </div>

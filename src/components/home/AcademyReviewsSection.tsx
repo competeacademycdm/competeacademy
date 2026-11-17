@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect, useRef, useCallback } from 'react';
 import Image from 'next/image';
+import { useLanguage } from '@/i18n';
 
 interface ReviewItem {
   id: string;
@@ -50,18 +51,30 @@ const REVIEWS: ReviewItem[] = [
 ];
 
 export function AcademyReviewsSection() {
+  const { tr, language } = useLanguage();
   const [activeIndex, setActiveIndex] = useState(1); // Start with center card (Arjun Kumar)
   const [isPaused, setIsPaused] = useState(false);
   const mobileScrollRef = useRef<HTMLDivElement>(null);
   const isScrollingFromDot = useRef(false);
 
+  const reviews = REVIEWS.map((rev, index) => {
+    const loc = tr.homepage.reviews.items[index];
+    return {
+      ...rev,
+      quote: loc ? loc.quote : rev.quote,
+      reviewer: loc ? loc.reviewer : rev.reviewer,
+      role: loc ? (loc.role as 'Student' | 'Parent') : rev.role,
+      program: loc ? loc.program : rev.program,
+    };
+  });
+
   const prevReview = useCallback(() => {
-    setActiveIndex((prev) => (prev === 0 ? REVIEWS.length - 1 : prev - 1));
-  }, []);
+    setActiveIndex((prev) => (prev === 0 ? reviews.length - 1 : prev - 1));
+  }, [reviews.length]);
 
   const nextReview = useCallback(() => {
-    setActiveIndex((prev) => (prev === REVIEWS.length - 1 ? 0 : prev + 1));
-  }, []);
+    setActiveIndex((prev) => (prev === reviews.length - 1 ? 0 : prev + 1));
+  }, [reviews.length]);
 
   // Sync mobile scroll container when activeIndex changes from dot or arrow
   useEffect(() => {
@@ -150,22 +163,28 @@ export function AcademyReviewsSection() {
           <div className="flex items-center gap-2 sm:gap-3">
             <span className="w-6 sm:w-12 h-[1px] bg-gradient-to-r from-transparent to-[#FFB91F]" />
             <span className="font-headline text-[0.625rem] sm:text-xs font-bold uppercase tracking-[0.16em] sm:tracking-[0.2em] text-[#FFB91F] px-2.5 py-1 rounded-full bg-[#FFB91F]/10 border border-[#FFB91F]/30">
-              ★ STUDENT &amp; PARENT TESTIMONIALS
+              ★ {tr.homepage.reviews.badge}
             </span>
             <span className="w-6 sm:w-12 h-[1px] bg-gradient-to-l from-transparent to-[#FFB91F]" />
           </div>
 
           {/* Main Heading with Gold Gradient Accent */}
           <h2 className="font-display text-xl sm:text-3xl lg:text-[2.65rem] font-bold text-white tracking-tight leading-[1.18]">
-            What They Say About{' '}
-            <span className="bg-gradient-to-r from-[#FFB91F] via-[#FFE299] to-[#FFB91F] bg-clip-text text-transparent">
-              Compete Academy
-            </span>
+            {language === 'TA' ? (
+              <span>மாணவர்கள் & பெற்றோர்களின் <span className="bg-gradient-to-r from-[#FFB91F] via-[#FFE299] to-[#FFB91F] bg-clip-text text-transparent">கருத்துகள்</span></span>
+            ) : (
+              <span>
+                What They Say About{' '}
+                <span className="bg-gradient-to-r from-[#FFB91F] via-[#FFE299] to-[#FFB91F] bg-clip-text text-transparent">
+                  Compete Academy
+                </span>
+              </span>
+            )}
           </h2>
 
           {/* Subtitle */}
           <p className="font-sans text-xs sm:text-sm lg:text-[0.9375rem] text-slate-300 max-w-[62ch] leading-relaxed">
-            Discover the experiences of students and parents who trust us in their academic journey.
+            {tr.homepage.reviews.subtitle}
           </p>
 
           {/* Graduation Cap Divider */}
@@ -192,7 +211,7 @@ export function AcademyReviewsSection() {
 
           {/* Desktop 3-Card Grid */}
           <div className="w-full max-w-[1200px] px-8 sm:px-12 grid grid-cols-3 gap-5 lg:gap-7 items-center transition-all duration-300">
-            {REVIEWS.map((rev, index) => {
+            {reviews.map((rev, index) => {
               const isCenter = index === activeIndex;
 
               return (
@@ -269,7 +288,7 @@ export function AcademyReviewsSection() {
             className="w-full flex flex-row overflow-x-auto snap-x snap-mandatory scroll-smooth no-scrollbar gap-3.5 px-4 pb-2"
             style={{ WebkitOverflowScrolling: 'touch' }}
           >
-            {REVIEWS.map((rev, index) => {
+            {reviews.map((rev, index) => {
               const isActive = index === activeIndex;
 
               return (
@@ -334,7 +353,7 @@ export function AcademyReviewsSection() {
 
         {/* Gold Pagination Dots (Synchronized across mobile & desktop) */}
         <div className="flex items-center gap-2 sm:gap-2.5">
-          {REVIEWS.map((_, i) => (
+          {reviews.map((_, i) => (
             <button
               key={i}
               type="button"
@@ -360,7 +379,7 @@ export function AcademyReviewsSection() {
                 98.4%
               </span>
               <span className="font-headline text-[0.625rem] sm:text-xs text-slate-300 font-medium uppercase tracking-wider">
-                Student Satisfaction
+                {language === 'TA' ? 'மாணவர் திருப்தி விகிதம்' : 'Student Satisfaction'}
               </span>
             </div>
 
@@ -373,7 +392,7 @@ export function AcademyReviewsSection() {
                 18,500+
               </span>
               <span className="font-headline text-[0.625rem] sm:text-xs text-slate-300 font-medium uppercase tracking-wider">
-                Happy Students
+                {language === 'TA' ? 'வெற்றி பெற்ற மாணவர்கள்' : 'Happy Students'}
               </span>
             </div>
 
@@ -386,7 +405,7 @@ export function AcademyReviewsSection() {
                 95%+
               </span>
               <span className="font-headline text-[0.625rem] sm:text-xs text-slate-300 font-medium uppercase tracking-wider">
-                Academic Success Rate
+                {language === 'TA' ? 'கல்வித் தேர்ச்சி விகிதம்' : 'Academic Success Rate'}
               </span>
             </div>
 
@@ -399,7 +418,7 @@ export function AcademyReviewsSection() {
                 4.9 / 5.0
               </span>
               <span className="font-headline text-[0.625rem] sm:text-xs text-slate-300 font-medium uppercase tracking-wider">
-                Parent Rating
+                {language === 'TA' ? 'பெற்றோர் மதிப்பீடு' : 'Parent Rating'}
               </span>
             </div>
 
