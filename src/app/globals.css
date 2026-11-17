@@ -1,0 +1,101 @@
+@import url('https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --font-inter: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    --font-manrope: 'Manrope', -apple-system, BlinkMacSystemFont, sans-serif;
+    --font-display: 'Playfair Display', Georgia, Cambria, 'Times New Roman', serif;
+    --font-dm-sans: 'DM Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+    --font-cormorant: 'Cormorant Garamond', Georgia, Cambria, serif;
+    --font-ibm-plex: 'IBM Plex Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+    --font-tamil: 'Noto Sans Tamil', 'Inter', sans-serif;
+
+    /* Header height definitions across breakpoints */
+    --header-height-mobile: 126px;
+    --header-height-desktop: 135px;
+    --header-total-height: var(--header-height-mobile);
+  }
+
+  @media (min-width: 640px) {
+    :root {
+      --header-total-height: var(--header-height-desktop);
+    }
+  }
+
+  html {
+    scroll-behavior: smooth;
+    font-feature-settings: 'cv02', 'cv03', 'cv04', 'cv11';
+    background-color: #fcf9f1;
+    color: #1c1c17;
+  }
+
+  body {
+    background-color: #fcf9f1;
+    color: #1c1c17;
+    min-height: 100dvh;
+    line-height: 1.5;
+    overflow-x: clip;
+    font-family: var(--font-dm-sans), var(--font-inter), sans-serif;
+  }
+
+  h1,
+  h2 {
+    text-wrap: balance;
+  }
+
+  p {
+    text-wrap: pretty;
+    overflow-wrap: break-word;
+  }
+
+  .pb-safe {
+    padding-bottom: env(safe-area-inset-bottom, 0px);
+  }
+
+  .pt-safe {
+    padding-top: env(safe-area-inset-top, 0px);
+  }
+}
+
+/* Institutional Motion System — Compositor-friendly & Reduced-Motion Safe */
+@keyframes heroFadeUp {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.hero-stagger-1,
+.hero-stagger-2,
+.hero-stagger-3,
+.hero-stagger-4,
+.hero-image-reveal {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .hero-stagger-1 {
+    animation: heroFadeUp 0.55s cubic-bezier(0.22, 1, 0.36, 1) 0.04s both;
+  }
+  .hero-stagger-2 {
+    animation: heroFadeUp 0.6s cubic-bezier(0.22, 1, 0.36, 1) 0.12s both;
+  }
+  .hero-stagger-3 {
+    animation: heroFadeUp 0.6s cubic-bezier(0.22, 1, 0.36, 1) 0.22s both;
+  }
+  .hero-stagger-4 {
+    animation: heroFadeUp 0.55s cubic-bezier(0.22, 1, 0.36, 1) 0.32s both;
+  }
+  .hero-image-reveal {
+    animation: heroFadeUp 0.7s cubic-bezier(0.22, 1, 0.36, 1) 0.18s both;
+  }
+}
